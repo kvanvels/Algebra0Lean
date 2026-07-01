@@ -1,0 +1,119 @@
+\chapter{Preliminaries: Set theory and categories}
+\label{chap:prelims}
+
+\section{Naive set theory}
+\label{sec:prelims:naive-set-theory}
+
+\subsection{Equivalence relations, partitions, quotients}
+\label{subsec:prelims:equivalence-relations}
+
+\begin{definition}[Partition]
+  \label{def:prelims:is-partition}
+  \lean{Algebra0Lean.Prelims.IsPartition}
+  \leanok
+  A \emph{partition} of a set $X$ is a set $c$ of subsets of $X$ such
+  that $\emptyset \notin c$ and every element of $X$ lies in exactly
+  one member of $c$.
+\end{definition}
+
+\begin{definition}[Equivalence classes]
+  \label{def:prelims:setoid-classes}
+  \uses{def:prelims:is-partition}
+  \lean{Algebra0Lean.Prelims.setoidClasses}
+  \leanok
+  Given an equivalence relation $\sim$ on $X$, the set of equivalence
+  classes of $\sim$.
+\end{definition}
+
+\begin{exercise}[I.1.2]
+  \label{exer:prelims:1.2}
+  \uses{def:prelims:is-partition, def:prelims:setoid-classes}
+  \lean{Algebra0Lean.Prelims.isPartition_setoidClasses}
+  The equivalence classes of an equivalence relation on $X$ form a
+  partition of $X$.
+\end{exercise}
+
+\section{Functions between sets}
+\label{sec:prelims:functions-between-sets}
+
+\subsection{Monomorphisms and epimorphisms}
+\label{subsec:prelims:functions:monomorphisms-and-epimorphisms}
+
+\begin{definition}[Monomorphism]
+  \label{def:prelims:monomorphic}
+  \lean{Algebra0Lean.Prelims.Monomorphic}
+  \leanok
+  A function $f : X \to Y$ is a \emph{monomorphism} if for every set
+  $Z$ and all functions $\alpha', \alpha'' : Z \to X$,
+  $f \circ \alpha' = f \circ \alpha''$ implies $\alpha' = \alpha''$.
+\end{definition}
+
+\begin{definition}[Epimorphism]
+  \label{def:prelims:epimorphic}
+  \lean{Algebra0Lean.Prelims.Epimorphic}
+  \leanok
+  A function $f : X \to Y$ is an \emph{epimorphism} if every function
+  $g : Z \to Y$ factors as $g = f \circ h$ for some $h : Z \to X$.
+\end{definition}
+
+\begin{proposition}[I.2.3]
+  \label{prop:prelims:2.3}
+  \uses{def:prelims:monomorphic}
+  \lean{Algebra0Lean.Prelims.injective_iff_monomorphic}
+  A function is injective if and only if it is a monomorphism.
+\end{proposition}
+
+\begin{exercise}[I.2.5]
+  \label{exer:prelims:2.5}
+  \uses{def:prelims:epimorphic}
+  \lean{Algebra0Lean.Prelims.epimorphic_iff_surjective}
+  A function is surjective if and only if it is an epimorphism.
+\end{exercise}
+
+\subsection{Canonical decomposition}
+\label{subsec:prelims:canonical-decomposition}
+
+\begin{definition}[Kernel pair]
+  \label{def:prelims:kernel-pair-setoid}
+  \lean{Algebra0Lean.Prelims.kernelPairSetoid}
+  \leanok
+  The equivalence relation on $X$ induced by a function $f : X \to Y$,
+  identifying $x, x'$ whenever $f(x) = f(x')$.
+\end{definition}
+
+\begin{definition}[Canonical projection]
+  \label{def:prelims:canonical-projection}
+  \uses{def:prelims:kernel-pair-setoid}
+  \lean{Algebra0Lean.Prelims.canonicalProjection}
+  \leanok
+  The canonical surjection $X \twoheadrightarrow X/{\sim}$ onto the
+  quotient by the kernel pair of $f$.
+\end{definition}
+
+\begin{definition}[Canonical bijection]
+  \label{def:prelims:canonical-bijection}
+  \uses{def:prelims:kernel-pair-setoid}
+  \lean{Algebra0Lean.Prelims.canonicalBijection}
+  \leanok
+  The induced bijection $X/{\sim} \to \image f$.
+\end{definition}
+
+\begin{definition}[Canonical inclusion]
+  \label{def:prelims:canonical-inclusion}
+  \lean{Algebra0Lean.Prelims.canonicalInclusion}
+  \leanok
+  The inclusion $\image f \hookrightarrow Y$.
+\end{definition}
+
+\begin{theorem}[I.2.8, canonical decomposition]
+  \label{thm:prelims:canonical-decomposition}
+  \uses{def:prelims:canonical-projection, def:prelims:canonical-bijection,
+    def:prelims:canonical-inclusion}
+  \lean{Algebra0Lean.Prelims.canonicalDecomposition}
+  Every function $f : X \to Y$ factors as
+  \[
+    f = (\text{inclusion}) \circ (\text{bijection}) \circ (\text{projection}),
+  \]
+  i.e.\ as a surjection, followed by a bijection, followed by an
+  injection.
+\end{theorem}
