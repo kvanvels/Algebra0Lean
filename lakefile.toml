@@ -1,0 +1,14 @@
+name = "Algebra0Lean"
+defaultTargets = ["Algebra0Lean"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+
+[[lean_lib]]
+name = "Algebra0Lean"
