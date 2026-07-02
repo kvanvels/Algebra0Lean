@@ -56,11 +56,11 @@ are both inverses of `g` in `G`, then `h₁ = h₂`. -/
 theorem isInverse_unique (g h1 h2 : G)
     (hh1 : IsInverse 𝔾 g h1) (hh2 : IsInverse 𝔾 g h2) : h1 = h2 := by
   have η1 := by calc
-    h1 = h1 ∙ 𝔾.e := by sorry
-     _ = h1 ∙ (g ∙ h2) := by sorry
-     _ = (h1 ∙  g) ∙ h2 := by sorry
-     _ = 𝔾.e ∙  h2 := by sorry
-     _ = h2 := by sorry
+    h1 = h1 ∙ 𝔾.e := by exact (𝔾.identity h1).1.symm
+     _ = h1 ∙ (g ∙ h2) := by rw [hh2.1]
+     _ = (h1 ∙  g) ∙ h2 := by rw [𝔾.assoc]
+     _ = 𝔾.e ∙  h2 := by rw [hh1.2]
+     _ = h2 := by exact (𝔾.identity h2).2     
   exact η1
 
 end DefinitionOfGroup
@@ -73,23 +73,24 @@ local infixl:70 " ∙ " => 𝔾.op
 
 /-- **Proposition II.1.4** (Cancellation). Let `G` be a group. Then for
 all `a, g, h ∈ G`, `ga = ha ⟹ g = h` and `ag = ah ⟹ g = h`. -/
-theorem cancel_right (a g h : G) (heq : g ∙ a = h ∙ a) : g = h := by
-  have η1 := by calc
-    g = g ∙ (a ∙ 𝔾.inv a) := by sorry
-    _ = (g ∙ a) ∙ (𝔾.inv a) := by sorry
+theorem cancel_right (a g h : G) (heq : g ∙ a = h ∙ a) : g = h := by calc
+    g = g ∙ 𝔾.e := by exact (𝔾.identity g).1.symm
+    _ = g ∙ (a ∙ 𝔾.inv a) := by rw [(𝔾.inverse a).1.symm]
+    _ = (g ∙ a) ∙ (𝔾.inv a) := by rw [𝔾.assoc]
     _ = (h ∙ a) ∙ (𝔾.inv a) := by rw [heq]
-    _ = h ∙ (a ∙ 𝔾.inv a) := by sorry
-    _ = h := by sorry
-  exact η1
-
+    _ = h ∙ (a ∙ 𝔾.inv a) := by rw [𝔾.assoc]
+    _ = h ∙ 𝔾.e := by rw [(𝔾.inverse a).1]
+    _ = h := by exact (𝔾.identity h).1
 
 theorem cancel_left (a g h : G) (heq : a ∙ g = a ∙ h) : g = h := by
   have η1 := by calc
-   g = (𝔾.inv a ∙ a) ∙ g := by sorry
-   _ = 𝔾.inv a ∙ (a ∙ g) := by sorry
-   _ = 𝔾.inv a ∙ (a ∙ h) := by sorry
-   _ = (𝔾.inv a ∙ a) ∙ h := by sorry
-   _ = h := by sorry
+   g = 𝔾.e ∙ g := by exact (𝔾.identity g).2.symm
+   _ = (𝔾.inv a ∙ a) ∙ g := by rw [(𝔾.inverse a).2]
+   _ = 𝔾.inv a ∙ (a ∙ g) := by rw [𝔾.assoc]
+   _ = 𝔾.inv a ∙ (a ∙ h) := by rw [heq]
+   _ = (𝔾.inv a ∙ a) ∙ h := by rw [𝔾.assoc]
+   _ = 𝔾.e ∙ h := by rw [(𝔾.inverse a).2]
+   _ = h := by exact (𝔾.identity h).2
   exact η1
 
 end Cancellation
