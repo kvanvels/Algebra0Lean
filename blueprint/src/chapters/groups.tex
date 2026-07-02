@@ -1,4 +1,73 @@
 \chapter{Groups, first encounter}
 \label{chap:groups}
 
-Not yet started.
+\section{Definition of group}
+\label{sec:groups:definition-of-group}
+
+\begin{definition}[Group]
+  \label{def:groups:group}
+  \lean{Algebra0Lean.Groups.Group}
+  \leanok
+  The set $G$, endowed with a binary operation $\bullet$, is a
+  \emph{group} if $\bullet$ is associative, has an identity element
+  $e_G$, and every element has an inverse.
+\end{definition}
+
+\begin{definition}[Identity element]
+  \label{def:groups:is-identity}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.IsIdentity}
+  \leanok
+  An element $h \in G$ is an identity for the group law if
+  $gh = g = hg$ for all $g \in G$.
+\end{definition}
+
+\begin{proposition}[II.1.2]
+  \label{prop:groups:identity-unique}
+  \uses{def:groups:is-identity}
+  \lean{Algebra0Lean.Groups.isIdentity_eq}
+  If $h \in G$ is an identity of $G$, then $h = e_G$.
+\end{proposition}
+
+\begin{definition}[Inverse]
+  \label{def:groups:is-inverse}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.IsInverse}
+  \leanok
+  An element $h \in G$ is an inverse of $g \in G$ if
+  $gh = e_G = hg$.
+\end{definition}
+
+\begin{proposition}[II.1.3]
+  \label{prop:groups:inverse-unique}
+  \uses{def:groups:is-inverse}
+  \lean{Algebra0Lean.Groups.isInverse_unique}
+  The inverse is also unique: if $h_1$, $h_2$ are both inverses of $g$
+  in $G$, then $h_1 = h_2$.
+\end{proposition}
+
+\subsection{Cancellation}
+\label{subsec:groups:cancellation}
+
+\begin{proposition}[II.1.4, cancellation]
+  \label{prop:groups:cancellation}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.cancel_left, Algebra0Lean.Groups.cancel_right}
+  Let $G$ be a group. Then $\forall a, g, h \in G$
+  \[
+    ga = ha \implies g = h, \qquad ag = ah \implies g = h.
+  \]
+\end{proposition}
+
+\subsection{Commutative groups}
+\label{subsec:groups:commutative-groups}
+
+\begin{definition}[Commutative group]
+  \label{def:groups:is-commutative}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.IsCommutative}
+  \leanok
+  The operation $\bullet$ is \emph{commutative} if $gh = hg$ for all
+  $g, h \in G$. A group whose operation is commutative is called
+  \emph{abelian}.
+\end{definition}
