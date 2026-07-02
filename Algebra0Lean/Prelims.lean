@@ -1,4 +1,10 @@
-import Mathlib
+import Mathlib.Logic.ExistsUnique
+import Mathlib.Data.Set.Defs
+import Mathlib.Data.Set.Operations
+import Mathlib.Data.Quot
+import Mathlib.Order.RelClasses
+import Mathlib.Tactic.ByContra
+import Mathlib.Data.Set.Basic
 
 /-!
 # Chapter I: Preliminaries — Set theory and categories
@@ -75,6 +81,32 @@ theorem isPartition_setoidClasses (r : Setoid X) :
   
 
 end EquivalenceRelationsAndPartitions
+
+section InjectiveSurjectiveInverses
+
+variable {X Y : Type*}
+
+/-- **Proposition I.2.4.** Assume `X` is nonempty, and let `f : X → Y`
+be a function. Then `f` has a left-inverse if and only if it is
+injective. -/
+theorem hasLeftInverse_iff_injective [Nonempty X] (f : X → Y) :
+    Function.HasLeftInverse f ↔ Function.Injective f := by
+  sorry
+
+/-- **Proposition I.2.4** (second part). `f` has a right-inverse if
+and only if it is surjective. -/
+theorem hasRightInverse_iff_surjective (f : X → Y) :
+    Function.HasRightInverse f ↔ Function.Surjective f := by
+  sorry
+
+/-- **Corollary I.2.5.** A function is a bijection if and only if it
+has a (two-sided) inverse. -/
+theorem bijective_iff_hasInverse [Nonempty X] (f : X → Y) :
+    Function.Bijective f ↔
+      ∃ g : Y → X, Function.LeftInverse g f ∧ Function.RightInverse g f := by
+  sorry
+
+end InjectiveSurjectiveInverses
 
 section MonomorphismsAndEpimorphisms
 
