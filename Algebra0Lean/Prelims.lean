@@ -26,35 +26,126 @@ def setoidClasses (r : Setoid X) : Set (Set X) :=
 a partition of `X`. -/
 theorem isPartition_setoidClasses (r : Setoid X) :
     IsPartition (setoidClasses r) := by
-  sorry
+  constructor
+  intro h0
+  unfold setoidClasses at h0
+  dsimp at h0
+  rcases h0 with ⟨y,hy⟩
+  let P : Set X := {x | x ≈ y}
+  
+  have h1 : P ⊆ ∅ := by sorry
+  have h2 : y ∈ P := by
+    unfold P
+    show y ≈ y
+    apply refl
+  exact h1 h2
+  intro y
+  let P : Set X := {x | x ≈ y}
+  use P
+  apply And.intro
+  dsimp
+  apply And.intro
+  unfold setoidClasses
+  use y
+  unfold P
+  show y ≈ y
+  apply refl
+  intro Q ⟨hQ0,hQ1⟩
+  unfold setoidClasses at hQ0
+  rcases hQ0 with ⟨q,hQ0⟩
+  
+  apply subset_antisymm
+  intro q hq
+  have h1 : q ≈ y := by sorry
+  unfold P
+  exact h1
+  intro p hp
+  have h1 : p ≈ y := by sorry
+  rw [hQ0] at hQ1
+  rw [hQ0]
+  unfold P at hp
+  show p ≈ q
+  clear hp
+  have hy : y ≈ q := by sorry
+  exact Setoid.trans h1 hy
+  
+  
+  
+  
+  
 
 end EquivalenceRelationsAndPartitions
 
 section MonomorphismsAndEpimorphisms
 
-variable {X Y : Type*}
+universe u
+variable {X Y : Type u}
 
 /-- `f` is a monomorphism: it is left-cancellable when precomposed with
 any function out of an arbitrary set `Z`. -/
 def Monomorphic (f : X → Y) : Prop :=
-  ∀ (Z : Type) (g g' : Z → X), f ∘ g = f ∘ g' → g = g'
+  ∀ (Z : Type u) (g g' : Z → X), f ∘ g = f ∘ g' → g = g'
 
 /-- `f` is an epimorphism: any function out of `Y` factors through `f`
 after precomposing with some function into `X`. -/
 def Epimorphic (f : X → Y) : Prop :=
-  ∀ (Z : Type) (g : Z → Y), ∃ h : Z → X, f ∘ h = g
+  ∀ (Z : Type u) (g : Z → Y), ∃ h : Z → X, f ∘ h = g
 
 /-- **Proposition I.2.3.** A function is injective if and only if it is
 a monomorphism. -/
-theorem injective_iff_monomorphic (f : X → Y) :
+theorem injective_iff_monomorphic (f : X → Y) [Nonempty X] :
     Function.Injective f ↔ Monomorphic f := by
-  sorry
+  apply Iff.intro
+  intro h0 Z g0 g1 h01
+  apply funext
+  intro z
+  have h1 := congr_fun h01 z
+  
+
+  exact @h0 (g0 z) (g1 z) h1  
+  intro h0 a0 a1 h1
+  specialize h0 X (fun x ↦ a0) (fun x ↦ a1) ?_
+  funext θ
+  exact h1
+  have h2 : ∃ y : X, True := (exists_const X).mpr trivial
+  rcases h2 with ⟨y,hy⟩
+  
+  have h1 := congr_fun h0  y
+  exact h1
+  
+    
+
 
 /-- **Exercise I.2.5.** A function is surjective if and only if it is
 an epimorphism. -/
 theorem epimorphic_iff_surjective (f : X → Y) :
     Epimorphic f ↔ Function.Surjective f := by
-  sorry
+  apply Iff.intro
+  intro h0 y
+  unfold Epimorphic at h0
+  specialize h0 Y id
+  rcases h0 with ⟨finv,hfinv⟩
+  use (finv y)
+  
+  rw [←@Function.comp_apply X Y Y f finv y,hfinv,id_eq]
+  
+  rintro h0 Z g
+
+  have h1 := h0.hasRightInverse
+  unfold Function.HasRightInverse at h1
+  rcases h1 with ⟨finv,hfinv⟩
+  clear h0
+  use finv ∘ g
+
+  unfold Function.RightInverse at hfinv
+  unfold Function.LeftInverse at hfinv
+  apply funext
+  intro z
+  rw [←Function.comp_assoc,Function.comp_apply]
+  exact hfinv (g z)
+  
+  
+
 
 end MonomorphismsAndEpimorphisms
 
@@ -81,7 +172,14 @@ def canonicalProjection (f : X → Y) : X → Quotient (kernelPairSetoid f) :=
 
 theorem canonicalProjection_surjective (f : X → Y) :
     (canonicalProjection f).Surjective := by
+  intro p
+  by_contra! h0
+  unfold kernelPairSetoid at p
+  unfold Quotient at p
+  
   sorry
+  
+
 
 /-- The induced bijection `X/∼ ≅ image f` of `Theorem I.2.8`. -/
 def canonicalBijection (f : X → Y) :
@@ -92,6 +190,9 @@ def canonicalBijection (f : X → Y) :
 
 theorem canonicalBijection_bijective (f : X → Y) :
     (canonicalBijection f).Bijective := by
+  apply And.intro
+  intro y0
+  sorry
   sorry
 
 /-- The canonical (injective) inclusion `image f ↪ Y` of
@@ -100,14 +201,25 @@ def canonicalInclusion (f : X → Y) : Set.range f → Y := fun x ↦ x.val
 
 theorem canonicalInclusion_injective (f : X → Y) :
     (canonicalInclusion f).Injective := by
-  sorry
+  intro ⟨y0,⟨x0,h0⟩⟩ ⟨y1,⟨x1,h1⟩ ⟩ h2  
+  unfold canonicalInclusion at h2
+  rcases h2 with ⟨h20,h21⟩
+  rfl
+    
 
 /-- **Theorem I.2.8** (canonical decomposition of a function). Every
 function factors as a surjection, followed by a bijection, followed by
 an injection. -/
 theorem canonicalDecomposition (f : X → Y) :
     f = canonicalInclusion f ∘ canonicalBijection f ∘ canonicalProjection f := by
-  sorry
+  apply funext
+  intro θ
+  simp
+  unfold canonicalProjection
+  unfold canonicalBijection
+  unfold canonicalInclusion  
+  simp only [Quotient.lift_mk]
+  
 
 end CanonicalDecomposition
 
