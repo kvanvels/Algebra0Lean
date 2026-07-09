@@ -1,4 +1,4 @@
-import Mathlib
+import Mathlib.Tactic.Common
 
 /-!
 # Chapter VI: Linear algebra

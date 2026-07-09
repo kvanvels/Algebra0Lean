@@ -39,7 +39,8 @@ theorem isPartition_setoidClasses (r : Setoid X) :
   rcases h0 with ⟨y,hy⟩
   let P : Set X := {x | x ≈ y}
   
-  have h1 : P ⊆ ∅ := by sorry
+  have h1 : P ⊆ ∅ := by
+    rw [hy]
   have h2 : y ∈ P := by
     unfold P
     show y ≈ y
@@ -61,18 +62,20 @@ theorem isPartition_setoidClasses (r : Setoid X) :
   rcases hQ0 with ⟨q,hQ0⟩
   
   apply subset_antisymm
-  intro q hq
-  have h1 : q ≈ y := by sorry
+  intro z hz
+  have h1 : z ≈ y := by
+    rw [hQ0] at hz hQ1
+    exact Setoid.trans hz (Setoid.symm hQ1)
   unfold P
   exact h1
   intro p hp
-  have h1 : p ≈ y := by sorry
+  have h1 : p ≈ y := hp
   rw [hQ0] at hQ1
   rw [hQ0]
   unfold P at hp
   show p ≈ q
   clear hp
-  have hy : y ≈ q := by sorry
+  have hy : y ≈ q := hQ1
   exact Setoid.trans h1 hy
   
   
@@ -91,20 +94,42 @@ be a function. Then `f` has a left-inverse if and only if it is
 injective. -/
 theorem hasLeftInverse_iff_injective [Nonempty X] (f : X → Y) :
     Function.HasLeftInverse f ↔ Function.Injective f := by
-  sorry
+  apply Iff.intro
+  · rintro ⟨g, hg⟩ a b hab
+    rw [← hg a, ← hg b, hab]
+  · intro hf
+    classical
+    refine ⟨fun y ↦ if h : ∃ x, f x = y then h.choose else Classical.arbitrary X, ?_⟩
+    intro x
+    have hex : ∃ a, f a = f x := ⟨x, rfl⟩
+    simp only [dif_pos hex]
+    exact hf hex.choose_spec
 
 /-- **Proposition I.2.4** (second part). `f` has a right-inverse if
 and only if it is surjective. -/
 theorem hasRightInverse_iff_surjective (f : X → Y) :
     Function.HasRightInverse f ↔ Function.Surjective f := by
-  sorry
+  apply Iff.intro
+  · rintro ⟨g, hg⟩ y
+    exact ⟨g y, hg y⟩
+  · intro hf
+    classical
+    exact ⟨fun y ↦ (hf y).choose, fun y ↦ (hf y).choose_spec⟩
 
 /-- **Corollary I.2.5.** A function is a bijection if and only if it
 has a (two-sided) inverse. -/
 theorem bijective_iff_hasInverse [Nonempty X] (f : X → Y) :
     Function.Bijective f ↔
       ∃ g : Y → X, Function.LeftInverse g f ∧ Function.RightInverse g f := by
-  sorry
+  apply Iff.intro
+  · rintro ⟨hinj, hsurj⟩
+    rcases (hasRightInverse_iff_surjective f).mpr hsurj with ⟨g, hg⟩
+    refine ⟨g, ?_, hg⟩
+    intro x
+    apply hinj
+    exact hg (f x)
+  · rintro ⟨g, hgl, hgr⟩
+    exact ⟨hgl.injective, hgr.surjective⟩
 
 end InjectiveSurjectiveInverses
 
@@ -205,12 +230,9 @@ def canonicalProjection (f : X → Y) : X → Quotient (kernelPairSetoid f) :=
 theorem canonicalProjection_surjective (f : X → Y) :
     (canonicalProjection f).Surjective := by
   intro p
-  by_contra! h0
-  unfold kernelPairSetoid at p
-  unfold Quotient at p
-  
-  sorry
-  
+  rcases Quotient.exists_rep p with ⟨a, ha⟩
+  exact ⟨a, ha⟩
+
 
 
 /-- The induced bijection `X/∼ ≅ image f` of `Theorem I.2.8`. -/
@@ -223,9 +245,13 @@ def canonicalBijection (f : X → Y) :
 theorem canonicalBijection_bijective (f : X → Y) :
     (canonicalBijection f).Bijective := by
   apply And.intro
-  intro y0
-  sorry
-  sorry
+  · intro x0 x1 h01
+    rcases Quotient.exists_rep x0 with ⟨a0, rfl⟩
+    rcases Quotient.exists_rep x1 with ⟨a1, rfl⟩
+    have h1 : f a0 = f a1 := congrArg Subtype.val h01
+    exact Quotient.sound h1
+  · rintro ⟨y, a, rfl⟩
+    exact ⟨⟦a⟧, rfl⟩
 
 /-- The canonical (injective) inclusion `image f ↪ Y` of
 `Theorem I.2.8`. -/
