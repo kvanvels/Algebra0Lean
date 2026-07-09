@@ -29,9 +29,13 @@
   \label{exer:prelims:1.2}
   \uses{def:prelims:is-partition, def:prelims:setoid-classes}
   \lean{Algebra0Lean.Prelims.isPartition_setoidClasses}
+  \leanok
   The equivalence classes of an equivalence relation on $X$ form a
   partition of $X$.
 \end{exercise}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \section{Functions between sets}
 \label{sec:prelims:functions-between-sets}
@@ -43,18 +47,27 @@
   \label{prop:prelims:inv-inj-sur}
   \lean{Algebra0Lean.Prelims.hasLeftInverse_iff_injective,
         Algebra0Lean.Prelims.hasRightInverse_iff_surjective}
+  \leanok
   Assume $X \neq \emptyset$, and let $f : X \to Y$ be a function.
   Then $f$ has a left-inverse if and only if it is injective, and $f$
   has a right-inverse if and only if it is surjective.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{corollary}[I.2.5]
   \label{coro:prelims:bijective-iff-inverse}
   \uses{prop:prelims:inv-inj-sur}
   \lean{Algebra0Lean.Prelims.bijective_iff_hasInverse}
+  \leanok
   A function $f : X \to Y$ is a bijection if and only if it has a
   (two-sided) inverse.
 \end{corollary}
+\begin{proof}
+  \uses{prop:prelims:inv-inj-sur}
+  \leanok
+\end{proof}
 
 \subsection{Monomorphisms and epimorphisms}
 \label{subsec:prelims:functions:monomorphisms-and-epimorphisms}
@@ -80,15 +93,23 @@
   \label{prop:prelims:2.3}
   \uses{def:prelims:monomorphic}
   \lean{Algebra0Lean.Prelims.injective_iff_monomorphic}
+  \leanok
   A function is injective if and only if it is a monomorphism.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{exercise}[I.2.5]
   \label{exer:prelims:2.5}
   \uses{def:prelims:epimorphic}
   \lean{Algebra0Lean.Prelims.epimorphic_iff_surjective}
+  \leanok
   A function is surjective if and only if it is an epimorphism.
 \end{exercise}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \subsection{Canonical decomposition}
 \label{subsec:prelims:canonical-decomposition}
@@ -130,6 +151,7 @@
   \uses{def:prelims:canonical-projection, def:prelims:canonical-bijection,
     def:prelims:canonical-inclusion}
   \lean{Algebra0Lean.Prelims.canonicalDecomposition}
+  \leanok
   Every function $f : X \to Y$ factors as
   \[
     f = (\text{inclusion}) \circ (\text{bijection}) \circ (\text{projection}),
@@ -137,3 +159,6 @@
   i.e.\ as a surjection, followed by a bijection, followed by an
   injection.
 \end{theorem}
+\begin{proof}
+  \leanok
+\end{proof}
