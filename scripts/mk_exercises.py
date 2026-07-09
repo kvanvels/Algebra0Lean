@@ -116,6 +116,14 @@ def main() -> None:
         if not name[0].isalpha():  # Emacs lock/backup files
             continue
         text = src.read_text()
+        # Re-namespace so exercises never collide with the solutions
+        # (e.g. when a tool imports both libraries into one environment).
+        text = re.sub(
+            r"^(namespace|end) Algebra0Lean\.",
+            r"\1 Exercises.",
+            text,
+            flags=re.MULTILINE,
+        )
         gen = HEADER.format(name=name) + strip_proofs(text)
         (DST / name).write_text(gen)
         modules.append(name.removesuffix(".lean"))

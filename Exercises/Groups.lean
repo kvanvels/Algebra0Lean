@@ -19,7 +19,7 @@ cancellation, ...) are genuine proof obligations. Later chapters
 transition to Mathlib's `Group`.
 -/
 
-namespace Algebra0Lean.Groups
+namespace Exercises.Groups
 
 section DefinitionOfGroup
 
@@ -210,4 +210,4 @@ theorem order_op_dvd_lcm (𝔾 : Group G) (g h : G) (hcomm : 𝔾.op g h = 𝔾.
 
 end Order
 
-end Algebra0Lean.Groups
+end Exercises.Groups

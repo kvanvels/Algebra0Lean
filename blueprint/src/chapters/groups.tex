@@ -26,8 +26,12 @@
   \label{prop:groups:identity-unique}
   \uses{def:groups:is-identity}
   \lean{Algebra0Lean.Groups.isIdentity_eq}
+  \leanok
   If $h \in G$ is an identity of $G$, then $h = e_G$.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{definition}[Inverse]
   \label{def:groups:is-inverse}
@@ -42,9 +46,13 @@
   \label{prop:groups:inverse-unique}
   \uses{def:groups:is-inverse}
   \lean{Algebra0Lean.Groups.isInverse_unique}
+  \leanok
   The inverse is also unique: if $h_1$, $h_2$ are both inverses of $g$
   in $G$, then $h_1 = h_2$.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \subsection{Cancellation}
 \label{subsec:groups:cancellation}
@@ -53,11 +61,15 @@
   \label{prop:groups:cancellation}
   \uses{def:groups:group}
   \lean{Algebra0Lean.Groups.cancel_left, Algebra0Lean.Groups.cancel_right}
+  \leanok
   Let $G$ be a group. Then $\forall a, g, h \in G$
   \[
     ga = ha \implies g = h, \qquad ag = ah \implies g = h.
   \]
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \subsection{Commutative groups}
 \label{subsec:groups:commutative-groups}
@@ -71,3 +83,94 @@
   $g, h \in G$. A group whose operation is commutative is called
   \emph{abelian}.
 \end{definition}
+
+\subsection{Order}
+\label{subsec:groups:order}
+
+\begin{definition}[Powers]
+  \label{def:groups:powers}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.gpow, Algebra0Lean.Groups.gzpow}
+  \leanok
+  For $g \in G$ and $n \geq 0$, the power $g^n = g \cdots g$ ($n$
+  times), with $g^0 = e_G$; for negative exponents,
+  $g^{-n} = (g^n)^{-1}$.
+\end{definition}
+
+\begin{definition}[II.1.5, order of an element]
+  \label{def:groups:order-element}
+  \uses{def:groups:powers}
+  \lean{Algebra0Lean.Groups.HasFiniteOrder, Algebra0Lean.Groups.order}
+  \leanok
+  An element $g \in G$ has \emph{finite order} if $g^n = e_G$ for some
+  positive integer $n$. In this case, the \emph{order} $|g|$ is the
+  smallest positive $n$ such that $g^n = e_G$. One writes
+  $|g| = \infty$ if $g$ does not have finite order (in the Lean
+  formalization, $|g| = 0$).
+\end{definition}
+
+\begin{lemma}[II.1.5]
+  \label{lem:groups:order-divisor}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.order_dvd_of_pow_eq_e}
+  \leanok
+  If $g^n = e_G$ for some positive integer $n$, then $|g|$ is a
+  divisor of $n$.
+\end{lemma}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{corollary}[II.1.6]
+  \label{coro:groups:order-multiple}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.gzpow_eq_e_iff_dvd_order}
+  \leanok
+  Let $g$ be an element of finite order, and let $N \in \mathbb{Z}$.
+  Then
+  \[
+    g^N = e_G \iff N \text{ is a multiple of } |g|.
+  \]
+\end{corollary}
+\begin{proof}
+  \uses{lem:groups:order-divisor}
+  \leanok
+\end{proof}
+
+\begin{definition}[Order of a group]
+  \label{def:groups:order-group}
+  \lean{Algebra0Lean.Groups.groupOrder}
+  \leanok
+  If $G$ is finite as a set, its \emph{order} $|G|$ is the number of
+  its elements; $|G| = \infty$ if $G$ is infinite (in the Lean
+  formalization, $|G| = 0$).
+\end{definition}
+
+\begin{proposition}[II.1.7]
+  \label{prop:groups:order-power}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.order_gpow}
+  \leanok
+  Let $g \in G$ be an element of finite order. Then $g^m$ has finite
+  order for all $m > 0$, and
+  \[
+    |g^m| = \frac{\operatorname{lcm}(m,|g|)}{m} =
+    \frac{|g|}{\gcd(m,|g|)}.
+  \]
+\end{proposition}
+\begin{proof}
+  \uses{lem:groups:order-divisor, coro:groups:order-multiple}
+  \leanok
+\end{proof}
+
+\begin{proposition}[II.1.8]
+  \label{prop:groups:order-product}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.order_op_dvd_lcm}
+  \leanok
+  If $gh = hg$, then $|gh|$ divides $\operatorname{lcm}(|g|,|h|)$.
+\end{proposition}
+\begin{proof}
+  \uses{lem:groups:order-divisor, coro:groups:order-multiple}
+  \leanok
+\end{proof}

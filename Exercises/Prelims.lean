@@ -17,7 +17,7 @@ Selected results from Aluffi, *Algebra: Chapter 0*, §I.1 (Naive set
 theory) and §I.2 (Functions between sets).
 -/
 
-namespace Algebra0Lean.Prelims
+namespace Exercises.Prelims
 
 section EquivalenceRelationsAndPartitions
 
@@ -148,4 +148,4 @@ theorem canonicalDecomposition (f : X → Y) :
 
 end CanonicalDecomposition
 
-end Algebra0Lean.Prelims
+end Exercises.Prelims
