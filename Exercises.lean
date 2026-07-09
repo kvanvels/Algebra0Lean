@@ -1,0 +1,9 @@
+import Exercises.Fields
+import Exercises.Groups
+import Exercises.Groups2
+import Exercises.Homological
+import Exercises.Irreducibility
+import Exercises.LinearAlgebra
+import Exercises.LinearReprise
+import Exercises.Prelims
+import Exercises.Rings

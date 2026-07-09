@@ -16,3 +16,6 @@ name = "checkdecls"
 git = "https://github.com/PatrickMassot/checkdecls.git"
 [[lean_lib]]
 name = "Algebra0Lean"
+
+[[lean_lib]]
+name = "Exercises"
