@@ -39,3 +39,4 @@
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+_local_site/
