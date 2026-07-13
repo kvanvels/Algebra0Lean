@@ -1,6 +1,7 @@
 import Mathlib.Logic.ExistsUnique
 import Mathlib.Data.Set.Defs
 import Mathlib.Data.Set.Operations
+import Mathlib.Data.Set.Insert
 import Mathlib.Data.Quot
 import Mathlib.Order.RelClasses
 import Mathlib.Tactic.ByContra
@@ -23,6 +24,57 @@ variable {X : Type*}
 of which lies in exactly one of them. -/
 def IsPartition (c : Set (Set X)) : Prop :=
   ∅ ∉ c ∧ ∀ a : X, ∃! s ∈ c, a ∈ s
+
+/-- A set of nonempty subsets of `X` is a partition of `X` iff its
+members are pairwise disjoint and their union is all of `X`. -/
+theorem isPartition_iff_pairwiseDisjoint_cover (c : Set (Set X)) :
+    IsPartition c ↔
+      ∅ ∉ c ∧
+      (∀ s ∈ c, ∀ t ∈ c, s ≠ t → Disjoint s t) ∧
+      (∀ a : X, ∃ s ∈ c, a ∈ s) := by
+  apply Iff.intro
+  · rintro ⟨h0,h1⟩
+    apply And.intro h0
+    apply And.intro
+    · intro s hs t ht hst θ (hθs : θ ⊆ s) (hθt : θ ⊆ t)
+      show θ ⊆ ∅
+      intro χ hχ
+      rcases h1 χ with ⟨L,⟨hL0,hL1⟩,hL2⟩
+      have ht := hL2 t ⟨ht,hθt hχ⟩ 
+      have hs := hL2 s ⟨hs,hθs hχ⟩
+      rw [←ht] at hs
+      exact False.elim (hst hs)
+    intro a
+    rcases h1 a with ⟨s,hs0,hs1⟩
+    use s
+  intro ⟨h0,h1,h2⟩
+  apply And.intro h0
+  · intro a
+    rcases h2 a with ⟨s,hs⟩ 
+    use s
+    apply And.intro hs
+    intro t ⟨ht0,ht1⟩
+    specialize h1 s hs.1 t ht0
+    contrapose! h1
+    apply And.intro
+    exact h1.symm
+    
+    unfold Disjoint
+    push Not
+    use {a}
+    apply And.intro
+    · intro χ
+      rw [Set.mem_singleton_iff]
+      intro hχ
+      rw [←hχ] at hs
+      exact hs.2
+    apply And.intro
+    · intro χ hχ 
+      rw [Set.mem_singleton_iff] at hχ
+      rwa [←hχ] at ht1
+    change ¬( ({a}:Set X) ⊆ ∅)
+    rw [Set.singleton_subset_iff]
+    exact Set.notMem_empty a
 
 /-- The set of equivalence classes of a setoid on `X`. -/
 def setoidClasses (r : Setoid X) : Set (Set X) :=
@@ -47,7 +99,7 @@ theorem isPartition_setoidClasses (r : Setoid X) :
     apply refl
   exact h1 h2
   intro y
-  let P : Set X := {x | x ≈ y}
+  let P : Set X := {x : X| x ≈ y}
   use P
   apply And.intro
   dsimp
@@ -77,10 +129,6 @@ theorem isPartition_setoidClasses (r : Setoid X) :
   clear hp
   have hy : y ≈ q := hQ1
   exact Setoid.trans h1 hy
-  
-  
-  
-  
   
 
 end EquivalenceRelationsAndPartitions
@@ -158,7 +206,6 @@ theorem injective_iff_monomorphic (f : X → Y) [Nonempty X] :
   intro z
   have h1 := congr_fun h01 z
   
-
   exact @h0 (g0 z) (g1 z) h1  
   intro h0 a0 a1 h1
   specialize h0 X (fun x ↦ a0) (fun x ↦ a1) ?_
@@ -169,9 +216,6 @@ theorem injective_iff_monomorphic (f : X → Y) [Nonempty X] :
   
   have h1 := congr_fun h0  y
   exact h1
-  
-    
-
 
 /-- **Exercise I.2.5.** A function is surjective if and only if it is
 an epimorphism. -/
@@ -200,9 +244,6 @@ theorem epimorphic_iff_surjective (f : X → Y) :
   intro z
   rw [←Function.comp_assoc,Function.comp_apply]
   exact hfinv (g z)
-  
-  
-
 
 end MonomorphismsAndEpimorphisms
 
