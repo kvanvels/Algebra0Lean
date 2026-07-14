@@ -129,7 +129,13 @@ theorem isPartition_setoidClasses (r : Setoid X) :
   clear hp
   have hy : y ≈ q := hQ1
   exact Setoid.trans h1 hy
-  
+
+
+/-- **Exercise I.1.3.** Every partition of `X` arises as the set of
+equivalence classes of some equivalence relation on `X`. -/
+theorem exists_setoid_of_isPartition {c : Set (Set X)} (hc : IsPartition c) :
+    ∃ r : Setoid X, setoidClasses r = c := by
+  sorry
 
 end EquivalenceRelationsAndPartitions
 
@@ -178,6 +184,40 @@ theorem bijective_iff_hasInverse [Nonempty X] (f : X → Y) :
     exact hg (f x)
   · rintro ⟨g, hgl, hgr⟩
     exact ⟨hgl.injective, hgr.surjective⟩
+
+/-- **Exercise I.2.3** (first part). The inverse of a bijection is a
+bijection. -/
+theorem bijective_invFun [Nonempty X] {f : X → Y} (hf : Function.Bijective f) :
+    Function.Bijective (Function.invFun f) := by
+  sorry
+
+/-- **Exercise I.2.3** (second part). The composite of two bijections
+is a bijection. -/
+theorem bijective_comp {Z : Type*} {f : X → Y} {g : Y → Z}
+    (hf : Function.Bijective f) (hg : Function.Bijective g) :
+    Function.Bijective (g ∘ f) := by
+  sorry
+
+/-- Two types are isomorphic if there is a bijection between them. -/
+def Isomorphic (A B : Type*) : Prop := Nonempty (A ≃ B)
+
+/-- **Exercise I.2.4** (first part). Isomorphism of sets is
+reflexive, symmetric, and transitive. -/
+theorem isomorphic_refl (A : Type*) : Isomorphic A A := by
+  sorry
+
+theorem isomorphic_symm {A B : Type*} (h : Isomorphic A B) : Isomorphic B A := by
+  sorry
+
+theorem isomorphic_trans {A B C : Type*} (h1 : Isomorphic A B) (h2 : Isomorphic B C) :
+    Isomorphic A C := by
+  sorry
+
+/-- **Exercise I.2.7.** The graph of `f : X → Y` is isomorphic to
+`X`. -/
+theorem isomorphic_graph (f : X → Y) :
+    Isomorphic {p : X × Y // p.2 = f p.1} X := by
+  sorry
 
 end InjectiveSurjectiveInverses
 
@@ -317,8 +357,7 @@ theorem canonicalDecomposition (f : X → Y) :
   unfold canonicalProjection
   unfold canonicalBijection
   unfold canonicalInclusion  
-  simp only [Quotient.lift_mk]
-  
+  simp only [Quotient.lift_mk]  
 
 end CanonicalDecomposition
 
