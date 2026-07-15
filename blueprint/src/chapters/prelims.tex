@@ -116,6 +116,38 @@
 \section{Functions between sets}
 \label{sec:prelims:functions-between-sets}
 
+\subsection{Injections, surjections, bijections}
+\label{subsec:prelims:injections-surjections-bijections}
+
+\begin{definition}[Isomorphic]
+  \label{def:prelims:isomorphic}
+  \lean{Algebra0Lean.Prelims.Isomorphic}
+  \leanok
+  Two sets $X$, $Y$ are \emph{isomorphic} (written
+  $X \overset{\sim}{=} Y$) if there is a bijection $X \to Y$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:prelims:bijective-id}
+  \lean{Algebra0Lean.Prelims.bijective_id}
+  The identity function $\id_X : X \to X$ is a bijection.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:finite-card-eq-of-isomorphic}
+  \uses{def:prelims:isomorphic}
+  \lean{Algebra0Lean.Prelims.finite_and_card_eq_of_isomorphic}
+  If $X$ is a finite set isomorphic to $Y$, then $Y$ is finite too, and
+  $|X| = |Y|$.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:bijective-unit-prod-mk}
+  \lean{Algebra0Lean.Prelims.bijective_unitProdMk}
+  The function $f : X \to \{0\} \times X$ defined by $f(a) = (0,a)$ is
+  a bijection.
+\end{proposition}
+
 \subsection{Injections, surjections, bijections: second viewpoint}
 \label{subsec:prelims:injections-surjections-bijections-second-viewpoint}
 

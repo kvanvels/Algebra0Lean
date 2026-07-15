@@ -185,6 +185,25 @@ section InjectiveSurjectiveInverses
 
 variable {X Y : Type*}
 
+/-- Two types are isomorphic if there is a bijection between them. -/
+def Isomorphic (A B : Type*) : Prop := Nonempty (A ≃ B)
+
+/-- The identity function is a bijection. -/
+theorem bijective_id : Function.Bijective (id : X → X) := by
+  sorry
+
+/-- If `X` is finite and isomorphic to `Y`, then `Y` is finite too, and
+`X`, `Y` have the same cardinality. -/
+theorem finite_and_card_eq_of_isomorphic [Finite X] (h : Isomorphic X Y) :
+    Finite Y ∧ Nat.card X = Nat.card Y := by
+  sorry
+
+/-- The tagging map `a ↦ ((), a)` from `X` to `Unit × X` is a
+bijection. -/
+theorem bijective_unitProdMk :
+    Function.Bijective (fun a : X => ((), a) : X → Unit × X) := by
+  sorry
+
 /-- **Proposition I.2.4.** Assume `X` is nonempty, and let `f : X → Y`
 be a function. Then `f` has a left-inverse if and only if it is
 injective. -/
@@ -239,9 +258,6 @@ theorem bijective_comp {Z : Type*} {f : X → Y} {g : Y → Z}
     (hf : Function.Bijective f) (hg : Function.Bijective g) :
     Function.Bijective (g ∘ f) := by
   sorry
-
-/-- Two types are isomorphic if there is a bijection between them. -/
-def Isomorphic (A B : Type*) : Prop := Nonempty (A ≃ B)
 
 /-- **Exercise I.2.4** (first part). Isomorphism of sets is
 reflexive, symmetric, and transitive. -/
