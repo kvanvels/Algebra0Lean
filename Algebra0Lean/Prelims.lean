@@ -338,7 +338,49 @@ between functions `X → Y` and subsets of `X × Y` satisfying
 theorem bijective_graphOf :
     Function.Bijective (fun f : X → Y =>
       (⟨graphOf f, isGraph_graphOf f⟩ : {Γ : Set (X × Y) // IsGraph Γ})) := by
-  sorry
+  apply And.intro
+  intro f0 f1 hf0f1
+  simp only [Subtype.mk.injEq] at hf0f1
+  unfold graphOf at hf0f1
+  apply funext
+  intro θ
+  have h1 : (θ,f0 θ) ∈ {p | p.2 = f0 p.1} := by rfl
+  rw [hf0f1] at h1
+  simp at h1
+  exact h1
+  intro Γf
+  unfold IsGraph at Γf
+  let f := fun a => (Γf.2 a).choose
+  let hf := fun a => (Γf.2 a).choose_spec.1
+  dsimp at hf
+  use f
+  apply Subtype.ext
+  apply subset_antisymm
+  rintro ⟨x,y⟩ hxy
+  unfold graphOf at hxy
+  dsimp at hxy
+  rw [hxy]
+  exact hf x
+  rintro ⟨x,y⟩ hxy
+  simp
+  unfold graphOf
+  show y = f x
+  have h1 := (Γf.2 x).choose_spec.2 y hxy
+  exact h1
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+      
 
 /-- Composition of functions is associative. -/
 theorem comp_assoc : Associative (@Function.comp) := by
