@@ -28,3 +28,28 @@ book's phrasing for a reader following along). Not yet decided.
 
 **Status:** Deferred — no blueprint or Lean content added yet for this
 subsection.
+
+## Resolved: Category structure representation
+
+**Question:** For Aluffi §I.3 (Categories), define our own `Category`
+structure matching the book, or build on Mathlib's `CategoryTheory.Category`?
+
+**Decision (2026-07-14):** Our own structure, in `Algebra0Lean.Prelims`:
+objects as a `Type u`, morphisms as `Hom : Obj → Obj → Type v` (independent
+universe), `id`, `comp` (argument order `(g, f) ↦ g ∘ f`, matching the
+book's `gf` notation and `Function.comp`), and `comp_assoc`/`id_comp`/
+`comp_id` axioms. `comp_assoc` is stated via a new shared `Associative`
+predicate general enough to also restate the earlier plain-function
+`comp_assoc` theorem (`I := Type*`, `Hom A B := A → B`,
+`comp := Function.comp`) — the two are literally the same shape.
+
+**Why:** Consistent with the established "own defs during the pedagogical
+Prelims phase, transition to Mathlib later" convention. See
+`style_own_defs_before_mathlib` in Claude's memory for this project.
+
+**Status:** Implemented. `Category`, `IsSmall`, `End`, and ~10 category
+examples (`typeCategory`, `preorderCategory`, `sliceCategory`, etc.) are in
+`Prelims.lean`, all axioms still `sorry`. If/when the project actually
+switches to Mathlib's `CategoryTheory` in a later chapter, this struct and
+everything built on it (Morphisms, Universal properties sections) will need
+a bridging pass.
