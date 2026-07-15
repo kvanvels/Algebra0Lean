@@ -97,6 +97,89 @@
   $g^{-n} = (g^n)^{-1}$.
 \end{definition}
 
+\begin{proposition}
+  \label{prop:groups:gpow-add}
+  \uses{def:groups:powers}
+  \lean{Algebra0Lean.Groups.gpow_add}
+  \leanok
+  Powers add: for $g \in G$ and $a, b \geq 0$, $g^{a+b} = g^a g^b$.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:gpow-mul}
+  \uses{def:groups:powers}
+  \lean{Algebra0Lean.Groups.gpow_mul}
+  \leanok
+  Powers multiply: for $g \in G$ and $a, b \geq 0$, $g^{ab} = (g^a)^b$.
+\end{proposition}
+\begin{proof}
+  \uses{prop:groups:gpow-add}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:gpow-e}
+  \uses{def:groups:powers}
+  \lean{Algebra0Lean.Groups.gpow_e}
+  \leanok
+  Every power of the identity is the identity: $e_G^n = e_G$ for all
+  $n \geq 0$.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:gpow-op-comm}
+  \uses{def:groups:powers}
+  \lean{Algebra0Lean.Groups.gpow_op_comm}
+  \leanok
+  If $h$ commutes with $g$ (i.e.\ $gh = hg$), then $h$ commutes with
+  every power of $g$: $g^n h = h g^n$ for all $n \geq 0$.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:gpow-op-of-comm}
+  \uses{def:groups:powers}
+  \lean{Algebra0Lean.Groups.gpow_op_of_comm}
+  \leanok
+  If $g$ and $h$ commute, powers distribute over the product:
+  $(gh)^n = g^n h^n$ for all $n \geq 0$.
+\end{proposition}
+\begin{proof}
+  \uses{prop:groups:gpow-op-comm}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:inv-e}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.inv_e}
+  \leanok
+  The identity is its own inverse: $e_G^{-1} = e_G$.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:inv-eq-e-iff}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.inv_eq_e_iff}
+  \leanok
+  For $x \in G$: $x^{-1} = e_G$ if and only if $x = e_G$.
+\end{proposition}
+\begin{proof}
+  \uses{prop:groups:inv-e}
+  \leanok
+\end{proof}
+
 \begin{definition}[II.1.5, order of an element]
   \label{def:groups:order-element}
   \uses{def:groups:powers}
@@ -109,6 +192,64 @@
   formalization, $|g| = 0$).
 \end{definition}
 
+\begin{proposition}
+  \label{prop:groups:order-pos}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.order_pos}
+  \leanok
+  An element of finite order has positive order.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:gpow-order}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.gpow_order}
+  \leanok
+  For an element $g$ of finite order, $g^{|g|} = e_G$.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:gpow-ne-e-of-lt-order}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.gpow_ne_e_of_lt_order}
+  \leanok
+  Minimality of the order: for an element $g$ of finite order, no
+  smaller positive power of $g$ is $e_G$, i.e.\ $g^m \neq e_G$ for
+  $0 < m < |g|$.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:order-eq-zero-of-infinite}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.order_eq_zero_of_infinite}
+  \leanok
+  An element of infinite order has order $0$ (Aluffi's $|g| = \infty$).
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:has-finite-order-of-order-pos}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.hasFiniteOrder_of_order_pos}
+  \leanok
+  Conversely, an element of positive order has finite order.
+\end{proposition}
+\begin{proof}
+  \uses{prop:groups:order-eq-zero-of-infinite}
+  \leanok
+\end{proof}
+
 \begin{lemma}[II.1.5]
   \label{lem:groups:order-divisor}
   \uses{def:groups:order-element}
@@ -118,6 +259,21 @@
   divisor of $n$.
 \end{lemma}
 \begin{proof}
+  \uses{prop:groups:order-pos, prop:groups:gpow-ne-e-of-lt-order}
+  \leanok
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:gpow-eq-e-iff-order-dvd}
+  \uses{def:groups:order-element}
+  \lean{Algebra0Lean.Groups.gpow_eq_e_iff_order_dvd}
+  \leanok
+  Restatement of Lemma II.1.5 as an equivalence, for natural exponents:
+  for an element $g$ of finite order, $g^n = e_G$ if and only if $|g|$
+  divides $n$.
+\end{proposition}
+\begin{proof}
+  \uses{lem:groups:order-divisor}
   \leanok
 \end{proof}
 
@@ -133,7 +289,7 @@
   \]
 \end{corollary}
 \begin{proof}
-  \uses{lem:groups:order-divisor}
+  \uses{lem:groups:order-divisor, prop:groups:gpow-eq-e-iff-order-dvd}
   \leanok
 \end{proof}
 
