@@ -339,3 +339,19 @@
   \uses{lem:groups:order-divisor, coro:groups:order-multiple}
   \leanok
 \end{proof}
+
+\section{Examples of groups}
+\label{sec:groups:examples-of-groups}
+
+\subsection{Symmetric groups}
+\label{subsec:groups:symmetric-groups}
+
+\begin{definition}[Symmetric group]
+  \label{def:groups:symmetric-group}
+  \uses{def:groups:group, def:prelims:aut, def:prelims:type-category}
+  \lean{Algebra0Lean.Groups.symmetricGroup}
+  Let $A$ be a set. The \textbf{symmetric group}, or \textbf{group of
+    permutations}, of $A$, denoted $S_A$, is the group
+  $\Aut_{\categ{Set}}(A)$: its elements are the bijections
+  $A \to A$, with composition as the group law.
+\end{definition}

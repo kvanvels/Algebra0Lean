@@ -1,3 +1,4 @@
+import Algebra0Lean.Prelims
 import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.Nat.Find
 import Mathlib.SetTheory.Cardinal.Finite
@@ -6,7 +7,7 @@ import Mathlib.SetTheory.Cardinal.Finite
 # Chapter II: Groups, first encounter
 
 Selected results from Aluffi, *Algebra: Chapter 0*, §II.1 (Definition
-of group).
+of group) and §II.2 (Examples of groups).
 
 This chapter defines its own `Group` structure from scratch, mirroring
 the book's definition, rather than using Mathlib's `Group` typeclass —
@@ -373,5 +374,24 @@ theorem order_op_dvd_lcm (g h : G) (hcomm : g ⋆ h = h ⋆ g) :
   exact order_dvd_of_pow_eq_e 𝔾 _ _ hLpos hgh
 
 end Order
+
+section ExamplesOfGroups
+
+open Algebra0Lean.Prelims
+
+/-- **Definition (Symmetric group).** Let `A` be a set. The
+**symmetric group**, or **group of permutations**, of `A` is the
+group `S_A` of automorphisms of `A` in the category of types: its
+elements are the bijections `A → A`, with composition as the group
+law. -/
+noncomputable def symmetricGroup (A : Type*) : Group (Category.Aut typeCategory A) where
+  op f g := ⟨typeCategory.comp g.1 f.1, f.2.isIso_comp g.2⟩
+  assoc := by sorry
+  e := ⟨typeCategory.id A, typeCategory.isIso_id A⟩
+  identity := by sorry
+  inv f := ⟨f.2.inv, f.2.isIso_inv⟩
+  inverse := by sorry
+
+end ExamplesOfGroups
 
 end Algebra0Lean.Groups
