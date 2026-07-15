@@ -355,3 +355,70 @@
   $\Aut_{\categ{Set}}(A)$: its elements are the bijections
   $A \to A$, with composition as the group law.
 \end{definition}
+
+\subsection{Cyclic groups and modular arithmetic}
+\label{subsec:groups:cyclic-groups-and-modular-arithmetic}
+
+\begin{definition}[Congruence mod $n$]
+  \label{def:groups:cong-mod}
+  \lean{Algebra0Lean.Groups.congMod}
+  \leanok
+  For $a, b \in \Z$: $a \equiv b \pmod{n}$ iff $n$ divides $b - a$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:equivalence-cong-mod}
+  \uses{def:groups:cong-mod}
+  \lean{Algebra0Lean.Groups.equivalence_congMod}
+  Congruence modulo $n$ is an equivalence relation on $\Z$.
+\end{proposition}
+
+\begin{lemma}
+  \label{lem:groups:congruence-addition}
+  \uses{def:groups:cong-mod}
+  \lean{Algebra0Lean.Groups.congMod_add}
+  \leanok
+  If $a \equiv a' \pmod{n}$ and $b \equiv b' \pmod{n}$, then
+  $(a+b) \equiv (a'+b') \pmod{n}$.
+\end{lemma}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{definition}[$\Z/n\Z$]
+  \label{def:groups:zmod-group}
+  \uses{def:groups:group, prop:groups:equivalence-cong-mod,
+    lem:groups:congruence-addition}
+  \lean{Algebra0Lean.Groups.zmodSetoid, Algebra0Lean.Groups.zmodGroup}
+  The (additive) group $\Z/n\Z$ of congruence classes mod $n$: the
+  quotient of $\Z$ by congruence mod $n$, with
+  $[a]_n + [b]_n := [a+b]_n$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:order-class}
+  \uses{def:groups:zmod-group, def:groups:order-element}
+  \lean{Algebra0Lean.Groups.order_class}
+  The order of $[m]_n$ in $\Z/n\Z$ is $1$ if $n \mid m$, and more
+  generally $|[m]_n| = \dfrac{n}{\gcd(m,n)}$.
+\end{proposition}
+
+\begin{definition}[Generator]
+  \label{def:groups:generates}
+  \uses{def:groups:group, def:groups:powers}
+  \lean{Algebra0Lean.Groups.Generates}
+  \leanok
+  An element $g \in G$ \textbf{generates} $G$ if every element of $G$
+  is an integer power of $g$.
+\end{definition}
+
+\begin{corollary}
+  \label{coro:groups:generator-coprime}
+  \uses{def:groups:zmod-group, def:groups:generates,
+    prop:groups:order-class}
+  \lean{Algebra0Lean.Groups.generates_iff_coprime}
+  The class $[m]_n$ generates $\Z/n\Z$ if and only if $\gcd(m,n) = 1$.
+\end{corollary}
+\begin{proof}
+  \uses{prop:groups:order-class}
+\end{proof}

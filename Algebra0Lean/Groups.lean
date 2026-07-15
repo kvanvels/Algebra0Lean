@@ -394,4 +394,88 @@ noncomputable def symmetricGroup (A : Type*) : Group (Category.Aut typeCategory 
 
 end ExamplesOfGroups
 
+section CyclicGroupsAndModularArithmetic
+
+/-- **Congruence modulo `n`.** For `a b : ℤ`, `a ≡ b (mod n)` iff `n`
+divides `b - a`. -/
+def congMod (n : ℕ) (a b : ℤ) : Prop := (n : ℤ) ∣ (b - a)
+
+/-- Congruence modulo `n` is an equivalence relation. -/
+theorem equivalence_congMod (n : ℕ) : Equivalence (congMod n) := by
+  sorry
+
+/-- **Lemma.** Congruence mod `n` is compatible with addition: if
+`a ≡ a'` and `b ≡ b'` (mod `n`), then `a + b ≡ a' + b'` (mod `n`). This
+is what makes `[a] + [b] := [a + b]` well-defined on `ℤ/nℤ`. -/
+theorem congMod_add {n : ℕ} {a a' b b' : ℤ}
+    (ha : congMod n a a') (hb : congMod n b b') :
+    congMod n (a + b) (a' + b') := by
+  rcases ha with ⟨k0,hk0⟩
+  rcases hb with ⟨k1,hk1⟩
+  use (k0 + k1)
+  rw [mul_add,←hk0,←hk1]
+  ring_nf
+
+/-- The setoid of congruence classes mod `n` on `ℤ`. -/
+def zmodSetoid (n : ℕ) : Setoid ℤ where
+  r := congMod n
+  iseqv := equivalence_congMod n
+
+/-- **The cyclic group `ℤ/nℤ`.** The additive group of congruence
+classes mod `n`, with `[a] + [b] := [a + b]` (well-defined by
+`congMod_add`). -/
+def zmodGroup (n : ℕ) : Group (Quotient (zmodSetoid n)) where
+  op := by
+    apply Quotient.lift₂ (fun a b => (Quotient.mk (zmodSetoid n) (a + b)))
+    rintro a0 b0 a1 b1 ⟨ka, hka⟩ ⟨kb, hkb⟩
+    apply Quotient.sound
+    apply congMod_add ⟨ka, hka⟩ ⟨kb, hkb⟩
+
+  assoc := by
+    rintro g h k
+    rcases Quotient.exists_rep g with ⟨g, rfl⟩
+    rcases Quotient.exists_rep h with ⟨h, rfl⟩
+    rcases Quotient.exists_rep k with ⟨k, rfl⟩
+    simp only [Quotient.lift_mk]
+    rw [add_assoc]
+
+  e := Quotient.mk (zmodSetoid n) 0
+  identity := by
+    intro g
+    rcases Quotient.exists_rep g with ⟨g, rfl⟩
+    simp
+
+  inv := by
+    apply Quotient.lift (fun a => (Quotient.mk (zmodSetoid n) (-a)))
+    rintro a b ⟨k, hk⟩
+    apply Quotient.sound
+    use -k
+    rw [mul_neg, ← hk]
+    ring_nf
+
+  inverse := by
+    intro g
+    rcases Quotient.exists_rep g with ⟨g, rfl⟩
+    simp only [Quotient.lift_mk, add_neg_cancel, neg_add_cancel, and_self]
+
+/-- **Proposition.** The order of `[m]ₙ` in `ℤ/nℤ` is `1` if `n ∣ m`,
+and more generally `|[m]ₙ| = n / gcd(m, n)`. -/
+theorem order_class {n : ℕ} (hn : 0 < n) (m : ℤ) :
+    order (zmodGroup n) (Quotient.mk (zmodSetoid n) m) = n / Int.gcd m (n : ℤ) := by
+  sorry
+  
+
+/-- `g` **generates** `𝔾`: every element of `G` is some integer power
+of `g`. -/
+def Generates {G : Type*} (𝔾 : Group G) (g : G) : Prop :=
+  ∀ x : G, ∃ k : ℤ, x = gzpow 𝔾 g k
+
+/-- **Corollary.** The class `[m]ₙ` generates `ℤ/nℤ` if and only if
+`gcd(m, n) = 1`. -/
+theorem generates_iff_coprime {n : ℕ} (hn : 0 < n) (m : ℤ) :
+    Generates (zmodGroup n) (Quotient.mk (zmodSetoid n) m) ↔ Int.gcd m (n : ℤ) = 1 := by
+  sorry
+
+end CyclicGroupsAndModularArithmetic
+
 end Algebra0Lean.Groups
