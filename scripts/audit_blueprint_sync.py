@@ -33,7 +33,11 @@ ROOT = Path(__file__).resolve().parent.parent
 LEAN_DIR = ROOT / "Algebra0Lean"
 TEX_DIR = ROOT / "blueprint" / "src" / "chapters"
 
-DECL_RE = re.compile(r"^(theorem|def)\s+([A-Za-z_][A-Za-z0-9_.']*)", re.MULTILINE)
+DECL_RE = re.compile(
+    r"^(?:noncomputable\s+|private\s+|protected\s+)*(theorem|def)\s+"
+    r"([A-Za-z_][A-Za-z0-9_.']*)",
+    re.MULTILINE,
+)
 SORRY_RE = re.compile(r"\bsorry\b")
 ENV_RE = re.compile(
     r"\\begin\{(proposition|theorem|lemma|corollary|exercise|definition)\}"
