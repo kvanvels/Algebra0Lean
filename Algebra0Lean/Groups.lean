@@ -124,91 +124,95 @@ def gzpow (𝔾 : Group G) (g : G) : ℤ → G
   | Int.ofNat n => gpow 𝔾 g n
   | Int.negSucc n => 𝔾.inv (gpow 𝔾 g (n + 1))
 
+variable (𝔾 : Group G)
+
+local infixl:70 " ⋆ " => 𝔾.op
+
 /-- Powers add: `g^(a+b) = g^a ⋆ g^b`. -/
-theorem gpow_add (𝔾 : Group G) (g : G) (a b : ℕ) :
-    gpow 𝔾 g (a + b) = 𝔾.op (gpow 𝔾 g a) (gpow 𝔾 g b) := by
+theorem gpow_add (g : G) (a b : ℕ) :
+    gpow 𝔾 g (a + b) = gpow 𝔾 g a ⋆ gpow 𝔾 g b := by
   induction b with
   | zero => exact ((𝔾.identity (gpow 𝔾 g a)).1).symm
   | succ b ih =>
-      show 𝔾.op (gpow 𝔾 g (a + b)) g = 𝔾.op (gpow 𝔾 g a) (𝔾.op (gpow 𝔾 g b) g)
+      show gpow 𝔾 g (a + b) ⋆ g = gpow 𝔾 g a ⋆ (gpow 𝔾 g b ⋆ g)
       rw [ih, 𝔾.assoc]
 
 /-- Powers add for integer exponents too: `g^(a+b) = g^a ⋆ g^b` for
 `a b : ℤ` (the book's stated form of the law, right after introducing
 powers). -/
-theorem gzpow_add (𝔾 : Group G) (g : G) (a b : ℤ) :
-    gzpow 𝔾 g (a + b) = 𝔾.op (gzpow 𝔾 g a) (gzpow 𝔾 g b) := by
+theorem gzpow_add (g : G) (a b : ℤ) :
+    gzpow 𝔾 g (a + b) = gzpow 𝔾 g a ⋆ gzpow 𝔾 g b := by
   sorry
 
 /-- Powers multiply: `g^(ab) = (g^a)^b`. -/
-theorem gpow_mul (𝔾 : Group G) (g : G) (a b : ℕ) :
+theorem gpow_mul (g : G) (a b : ℕ) :
     gpow 𝔾 g (a * b) = gpow 𝔾 (gpow 𝔾 g a) b := by
   induction b with
   | zero => rfl
   | succ b ih =>
-      show gpow 𝔾 g (a * b + a) = 𝔾.op (gpow 𝔾 (gpow 𝔾 g a) b) (gpow 𝔾 g a)
+      show gpow 𝔾 g (a * b + a) = gpow 𝔾 (gpow 𝔾 g a) b ⋆ gpow 𝔾 g a
       rw [gpow_add, ih]
 
 /-- Every power of the identity is the identity. -/
-theorem gpow_e (𝔾 : Group G) (n : ℕ) : gpow 𝔾 𝔾.e n = 𝔾.e := by
+theorem gpow_e (n : ℕ) : gpow 𝔾 𝔾.e n = 𝔾.e := by
   induction n with
   | zero => rfl
   | succ n ih =>
-      show 𝔾.op (gpow 𝔾 𝔾.e n) 𝔾.e = 𝔾.e
+      show gpow 𝔾 𝔾.e n ⋆ 𝔾.e = 𝔾.e
       rw [ih]
       exact (𝔾.identity 𝔾.e).1
 
 /-- If `h` commutes with `g`, it commutes with every power of `g`. -/
-theorem gpow_op_comm (𝔾 : Group G) {g h : G} (hc : 𝔾.op g h = 𝔾.op h g) (n : ℕ) :
-    𝔾.op (gpow 𝔾 g n) h = 𝔾.op h (gpow 𝔾 g n) := by
+theorem gpow_op_comm {g h : G} (hc : g ⋆ h = h ⋆ g) (n : ℕ) :
+    gpow 𝔾 g n ⋆ h = h ⋆ gpow 𝔾 g n := by
   induction n with
   | zero => exact ((𝔾.identity h).2).trans ((𝔾.identity h).1).symm
   | succ n ih =>
-      show 𝔾.op (𝔾.op (gpow 𝔾 g n) g) h = 𝔾.op h (𝔾.op (gpow 𝔾 g n) g)
+      show gpow 𝔾 g n ⋆ g ⋆ h = h ⋆ (gpow 𝔾 g n ⋆ g)
       rw [𝔾.assoc, hc, ← 𝔾.assoc, ih, 𝔾.assoc]
 
 /-- For commuting `g`, `h`, powers distribute: `(gh)^n = g^n ⋆ h^n`. -/
-theorem gpow_op_of_comm (𝔾 : Group G) {g h : G} (hc : 𝔾.op g h = 𝔾.op h g) (n : ℕ) :
-    gpow 𝔾 (𝔾.op g h) n = 𝔾.op (gpow 𝔾 g n) (gpow 𝔾 h n) := by
+theorem gpow_op_of_comm {g h : G} (hc : g ⋆ h = h ⋆ g) (n : ℕ) :
+    gpow 𝔾 (g ⋆ h) n = gpow 𝔾 g n ⋆ gpow 𝔾 h n := by
   induction n with
   | zero => exact ((𝔾.identity 𝔾.e).1).symm
   | succ n ih =>
-      show 𝔾.op (gpow 𝔾 (𝔾.op g h) n) (𝔾.op g h)
-          = 𝔾.op (𝔾.op (gpow 𝔾 g n) g) (𝔾.op (gpow 𝔾 h n) h)
-      calc 𝔾.op (gpow 𝔾 (𝔾.op g h) n) (𝔾.op g h)
-          = 𝔾.op (𝔾.op (gpow 𝔾 g n) (gpow 𝔾 h n)) (𝔾.op g h) := by rw [ih]
-        _ = 𝔾.op (gpow 𝔾 g n) (𝔾.op (𝔾.op (gpow 𝔾 h n) g) h) := by
+      show gpow 𝔾 (g ⋆ h) n ⋆ (g ⋆ h)
+          = gpow 𝔾 g n ⋆ g ⋆ (gpow 𝔾 h n ⋆ h)
+      calc gpow 𝔾 (g ⋆ h) n ⋆ (g ⋆ h)
+          = gpow 𝔾 g n ⋆ gpow 𝔾 h n ⋆ (g ⋆ h) := by rw [ih]
+        _ = gpow 𝔾 g n ⋆ (gpow 𝔾 h n ⋆ g ⋆ h) := by
               rw [𝔾.assoc, 𝔾.assoc]
-        _ = 𝔾.op (gpow 𝔾 g n) (𝔾.op (𝔾.op g (gpow 𝔾 h n)) h) := by
+        _ = gpow 𝔾 g n ⋆ (g ⋆ gpow 𝔾 h n ⋆ h) := by
               rw [gpow_op_comm 𝔾 hc.symm]
-        _ = 𝔾.op (𝔾.op (gpow 𝔾 g n) g) (𝔾.op (gpow 𝔾 h n) h) := by
+        _ = gpow 𝔾 g n ⋆ g ⋆ (gpow 𝔾 h n ⋆ h) := by
               rw [𝔾.assoc, 𝔾.assoc]
 
 /-- The identity is its own inverse. -/
-theorem inv_e (𝔾 : Group G) : 𝔾.inv 𝔾.e = 𝔾.e :=
+theorem inv_e : 𝔾.inv 𝔾.e = 𝔾.e :=
   ((𝔾.identity (𝔾.inv 𝔾.e)).2).symm.trans (𝔾.inverse 𝔾.e).1
 
 /-- `g⁻¹ = e` if and only if `g = e`. -/
-theorem inv_eq_e_iff (𝔾 : Group G) (x : G) : 𝔾.inv x = 𝔾.e ↔ x = 𝔾.e := by
+theorem inv_eq_e_iff (x : G) : 𝔾.inv x = 𝔾.e ↔ x = 𝔾.e := by
   constructor
   · intro h
-    have h1 : 𝔾.op x (𝔾.inv x) = 𝔾.e := (𝔾.inverse x).1
+    have h1 : x ⋆ 𝔾.inv x = 𝔾.e := (𝔾.inverse x).1
     rw [h] at h1
     exact ((𝔾.identity x).1).symm.trans h1
   · rintro rfl
     exact inv_e 𝔾
 
 /-- `g` has finite order if `g^n = e` for some positive `n`. -/
-def HasFiniteOrder (𝔾 : Group G) (g : G) : Prop :=
+def HasFiniteOrder (g : G) : Prop :=
   ∃ n : ℕ, 0 < n ∧ gpow 𝔾 g n = 𝔾.e
 
 /-- **Definition II.1.5.** The order of `g`: the least positive `n`
 with `g^n = e`, or `0` if `g` has infinite order (Aluffi's `|g| = ∞`). -/
-noncomputable def order (𝔾 : Group G) (g : G) : ℕ := by
+noncomputable def order (g : G) : ℕ := by
   classical exact if h : HasFiniteOrder 𝔾 g then Nat.find h else 0
 
 /-- An element of finite order has positive order. -/
-theorem order_pos (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g) :
+theorem order_pos (g : G) (hf : HasFiniteOrder 𝔾 g) :
     0 < order 𝔾 g := by
   classical
   unfold order
@@ -216,7 +220,7 @@ theorem order_pos (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g) :
   exact (Nat.find_spec hf).1
 
 /-- `g^|g| = e` for an element of finite order. -/
-theorem gpow_order (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g) :
+theorem gpow_order (g : G) (hf : HasFiniteOrder 𝔾 g) :
     gpow 𝔾 g (order 𝔾 g) = 𝔾.e := by
   classical
   unfold order
@@ -224,7 +228,7 @@ theorem gpow_order (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g) :
   exact (Nat.find_spec hf).2
 
 /-- Minimality of the order: no smaller positive power of `g` is `e`. -/
-theorem gpow_ne_e_of_lt_order (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g)
+theorem gpow_ne_e_of_lt_order (g : G) (hf : HasFiniteOrder 𝔾 g)
     {m : ℕ} (hm : 0 < m) (hlt : m < order 𝔾 g) : gpow 𝔾 g m ≠ 𝔾.e := by
   classical
   intro he
@@ -233,14 +237,14 @@ theorem gpow_ne_e_of_lt_order (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾
   exact Nat.find_min hf hlt ⟨hm, he⟩
 
 /-- An element of infinite order has order `0` (Aluffi's `|g| = ∞`). -/
-theorem order_eq_zero_of_infinite (𝔾 : Group G) (g : G)
+theorem order_eq_zero_of_infinite (g : G)
     (hf : ¬HasFiniteOrder 𝔾 g) : order 𝔾 g = 0 := by
   classical
   unfold order
   rw [dif_neg hf]
 
 /-- An element of positive order has finite order. -/
-theorem hasFiniteOrder_of_order_pos (𝔾 : Group G) (g : G)
+theorem hasFiniteOrder_of_order_pos (g : G)
     (h : 0 < order 𝔾 g) : HasFiniteOrder 𝔾 g := by
   by_contra hn
   rw [order_eq_zero_of_infinite 𝔾 g hn] at h
@@ -248,7 +252,7 @@ theorem hasFiniteOrder_of_order_pos (𝔾 : Group G) (g : G)
 
 /-- **Lemma II.1.5.** If `g^n = e` for some positive integer `n`, then
 `|g|` is a divisor of `n`. -/
-theorem order_dvd_of_pow_eq_e (𝔾 : Group G) (g : G) (n : ℕ) (hn : 0 < n)
+theorem order_dvd_of_pow_eq_e (g : G) (n : ℕ) (hn : 0 < n)
     (he : gpow 𝔾 g n = 𝔾.e) : order 𝔾 g ∣ n := by
   have hf : HasFiniteOrder 𝔾 g := ⟨n, hn, he⟩
   have hpos : 0 < order 𝔾 g := order_pos 𝔾 g hf
@@ -260,9 +264,9 @@ theorem order_dvd_of_pow_eq_e (𝔾 : Group G) (g : G) (n : ℕ) (hn : 0 < n)
     have h2 : gpow 𝔾 g (order 𝔾 g * (n / order 𝔾 g)) = 𝔾.e := by
       rw [gpow_mul, gpow_order 𝔾 g hf, gpow_e]
     calc gpow 𝔾 g (n % order 𝔾 g)
-        = 𝔾.op 𝔾.e (gpow 𝔾 g (n % order 𝔾 g)) := ((𝔾.identity _).2).symm
-      _ = 𝔾.op (gpow 𝔾 g (order 𝔾 g * (n / order 𝔾 g)))
-            (gpow 𝔾 g (n % order 𝔾 g)) := by rw [h2]
+        = 𝔾.e ⋆ gpow 𝔾 g (n % order 𝔾 g) := ((𝔾.identity _).2).symm
+      _ = gpow 𝔾 g (order 𝔾 g * (n / order 𝔾 g))
+            ⋆ gpow 𝔾 g (n % order 𝔾 g) := by rw [h2]
       _ = gpow 𝔾 g (order 𝔾 g * (n / order 𝔾 g) + n % order 𝔾 g) :=
             (gpow_add 𝔾 g _ _).symm
       _ = gpow 𝔾 g n := by rw [h1]
@@ -275,7 +279,7 @@ theorem order_dvd_of_pow_eq_e (𝔾 : Group G) (g : G) (n : ℕ) (hn : 0 < n)
 
 /-- Restatement of Lemma II.1.5 as an equivalence, for natural exponents:
 `g^n = e` if and only if `|g|` divides `n`. -/
-theorem gpow_eq_e_iff_order_dvd (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g)
+theorem gpow_eq_e_iff_order_dvd (g : G) (hf : HasFiniteOrder 𝔾 g)
     (n : ℕ) : gpow 𝔾 g n = 𝔾.e ↔ order 𝔾 g ∣ n := by
   constructor
   · intro he
@@ -287,7 +291,7 @@ theorem gpow_eq_e_iff_order_dvd (𝔾 : Group G) (g : G) (hf : HasFiniteOrder �
 
 /-- **Corollary II.1.6.** Let `g` be an element of finite order, and
 let `N : ℤ`. Then `g^N = e ↔ N` is a multiple of `|g|`. -/
-theorem gzpow_eq_e_iff_dvd_order (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g)
+theorem gzpow_eq_e_iff_dvd_order (g : G) (hf : HasFiniteOrder 𝔾 g)
     (N : ℤ) : gzpow 𝔾 g N = 𝔾.e ↔ (order 𝔾 g : ℤ) ∣ N := by
   cases N with
   | ofNat n =>
@@ -310,7 +314,7 @@ Then `g^m` has finite order for all `m ≥ 0`, and
 The `lcm` form requires `0 < m`: for `m = 0` we have `|g^0| = |e| = 1`
 while `lcm(0, |g|) / 0 = 0` in `ℕ` (Aluffi's second expression
 `|g| / gcd(m, |g|)` does cover `m = 0`). -/
-theorem order_gpow (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g) (m : ℕ)
+theorem order_gpow (g : G) (hf : HasFiniteOrder 𝔾 g) (m : ℕ)
     (hm : 0 < m) :
     order 𝔾 (gpow 𝔾 g m) = Nat.lcm m (order 𝔾 g) / m := by
   have hgpos : 0 < order 𝔾 g := order_pos 𝔾 g hf
@@ -346,8 +350,8 @@ theorem order_gpow (𝔾 : Group G) (g : G) (hf : HasFiniteOrder 𝔾 g) (m : �
 
 /-- **Proposition II.1.8.** If `g` and `h` commute, then `|gh|` divides
 `lcm(|g|, |h|)`. -/
-theorem order_op_dvd_lcm (𝔾 : Group G) (g h : G) (hcomm : 𝔾.op g h = 𝔾.op h g) :
-    order 𝔾 (𝔾.op g h) ∣ Nat.lcm (order 𝔾 g) (order 𝔾 h) := by
+theorem order_op_dvd_lcm (g h : G) (hcomm : g ⋆ h = h ⋆ g) :
+    order 𝔾 (g ⋆ h) ∣ Nat.lcm (order 𝔾 g) (order 𝔾 h) := by
   -- If `g` or `h` has infinite order the lcm is `0` and the claim is trivial.
   rcases Nat.eq_zero_or_pos (order 𝔾 g) with hg0 | hgpos
   · rw [hg0, Nat.lcm_zero_left]
@@ -361,7 +365,7 @@ theorem order_op_dvd_lcm (𝔾 : Group G) (g h : G) (hcomm : 𝔾.op g h = 𝔾.
   have hfh := hasFiniteOrder_of_order_pos 𝔾 h hhpos
   have hLpos : 0 < Nat.lcm (order 𝔾 g) (order 𝔾 h) :=
     Nat.pos_of_ne_zero (Nat.lcm_ne_zero hgpos.ne' hhpos.ne')
-  have hgh : gpow 𝔾 (𝔾.op g h) (Nat.lcm (order 𝔾 g) (order 𝔾 h)) = 𝔾.e := by
+  have hgh : gpow 𝔾 (g ⋆ h) (Nat.lcm (order 𝔾 g) (order 𝔾 h)) = 𝔾.e := by
     rw [gpow_op_of_comm 𝔾 hcomm,
       (gpow_eq_e_iff_order_dvd 𝔾 g hfg _).2 (Nat.dvd_lcm_left _ _),
       (gpow_eq_e_iff_order_dvd 𝔾 h hfh _).2 (Nat.dvd_lcm_right _ _)]
