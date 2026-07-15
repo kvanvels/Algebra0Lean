@@ -149,6 +149,15 @@ theorem exists_setoid_of_isPartition {c : Set (Set X)} (hc : IsPartition c) :
     ∃ r : Setoid X, setoidClasses r = c := by
   sorry
 
+/-- The notions of "equivalence relation on `X`" and "partition of
+`X`" are really equivalent: `setoidClasses` is a bijection from
+equivalence relations on `X` to partitions of `X`. -/
+theorem bijective_setoidClasses_subtype :
+    Function.Bijective (fun r : Setoid X =>
+      (⟨setoidClasses r, isPartition_setoidClasses r⟩ :
+        {c : Set (Set X) // IsPartition c})) := by
+  sorry
+
 /-- **Exercise I.1.4** (generalized to `n` elements). The number of
 equivalence relations on a set of `n` elements is the `n`th Bell number. -/
 theorem card_setoid_fin_eq_bell (n : ℕ) :
@@ -184,6 +193,40 @@ end EquivalenceRelationsAndPartitions
 section InjectiveSurjectiveInverses
 
 variable {X Y : Type*}
+
+/-- The graph of `f : X → Y`. -/
+def graphOf (f : X → Y) : Set (X × Y) := {p | p.2 = f p.1}
+
+/-- A subset `Γ ⊆ X × Y` is the graph of a function `X → Y` iff every
+`a` has exactly one `b` with `(a, b) ∈ Γ`: this is the requirement a
+subset of `X × Y` must satisfy in order to be (the graph of) a
+function. -/
+def IsGraph (Γ : Set (X × Y)) : Prop := ∀ a : X, ∃! b : Y, (a, b) ∈ Γ
+
+/-- The graph of a function satisfies `IsGraph`. -/
+theorem isGraph_graphOf (f : X → Y) : IsGraph (graphOf f) := by
+  sorry
+
+/-- **A function really "is" its graph.** `graphOf` is a bijection
+between functions `X → Y` and subsets of `X × Y` satisfying
+`IsGraph`. -/
+theorem bijective_graphOf :
+    Function.Bijective (fun f : X → Y =>
+      (⟨graphOf f, isGraph_graphOf f⟩ : {Γ : Set (X × Y) // IsGraph Γ})) := by
+  sorry
+
+/-- Composition of functions is associative. -/
+theorem comp_assoc {Z W : Type*} (f : X → Y) (g : Y → Z) (h : Z → W) :
+    h ∘ (g ∘ f) = (h ∘ g) ∘ f := by
+  sorry
+
+/-- The identity function is a left unit for composition. -/
+theorem id_comp (f : X → Y) : (id : Y → Y) ∘ f = f := by
+  sorry
+
+/-- The identity function is a right unit for composition. -/
+theorem comp_id (f : X → Y) : f ∘ (id : X → X) = f := by
+  sorry
 
 /-- Two types are isomorphic if there is a bijection between them. -/
 def Isomorphic (A B : Type*) : Prop := Nonempty (A ≃ B)
@@ -245,6 +288,52 @@ theorem bijective_iff_hasInverse [Nonempty X] (f : X → Y) :
     exact hg (f x)
   · rintro ⟨g, hgl, hgr⟩
     exact ⟨hgl.injective, hgr.surjective⟩
+
+/-- If `f` is injective but not surjective, it has no right-inverse. -/
+theorem not_hasRightInverse_of_injective_not_surjective {f : X → Y}
+    (hf : Function.Injective f) (hf' : ¬ Function.Surjective f) :
+    ¬ Function.HasRightInverse f := by
+  sorry
+
+/-- If `f` is injective but not surjective, and `X` has at least two
+elements, then `f` has more than one left-inverse. -/
+theorem exists_ne_leftInverse_of_injective_not_surjective {f : X → Y}
+    (hf : Function.Injective f) (hf' : ¬ Function.Surjective f)
+    (hX : ∃ x₁ x₂ : X, x₁ ≠ x₂) :
+    ∃ g₁ g₂ : Y → X, Function.LeftInverse g₁ f ∧ Function.LeftInverse g₂ f ∧ g₁ ≠ g₂ := by
+  sorry
+
+/-- A right-inverse of `f` is also called a *section* of `f`. -/
+def IsSection (f : X → Y) (g : Y → X) : Prop := Function.RightInverse g f
+
+/-- If `f` is surjective and some fiber of `f` has at least two
+elements, then `f` has more than one right-inverse (section). -/
+theorem exists_ne_section_of_surjective {f : X → Y} (hf : Function.Surjective f)
+    (h : ∃ (y : Y) (x₁ x₂ : X), f x₁ = y ∧ f x₂ = y ∧ x₁ ≠ x₂) :
+    ∃ g₁ g₂ : Y → X, IsSection f g₁ ∧ IsSection f g₂ ∧ g₁ ≠ g₂ := by
+  sorry
+
+/-- The fiber of `f` over `q`: the set of all elements mapping to
+`q`. -/
+def fiber (f : X → Y) (q : Y) : Set X := {a : X | f a = q}
+
+/-- `f` is surjective iff every fiber is nonempty. -/
+theorem surjective_iff_forall_fiber_nonempty (f : X → Y) :
+    Function.Surjective f ↔ ∀ q : Y, (fiber f q).Nonempty := by
+  sorry
+
+/-- `f` is injective iff every fiber is a subsingleton (has at most
+one element). -/
+theorem injective_iff_forall_fiber_subsingleton (f : X → Y) :
+    Function.Injective f ↔ ∀ q : Y, (fiber f q).Subsingleton := by
+  sorry
+
+/-- For a bijective `f` with two-sided inverse `g`, the forward image
+under `g` of a subset agrees with the preimage under `f`. -/
+theorem image_inverse_eq_preimage {f : X → Y} {g : Y → X}
+    (hgl : Function.LeftInverse g f) (hgr : Function.RightInverse g f) (T : Set Y) :
+    g '' T = f ⁻¹' T := by
+  sorry
 
 /-- **Exercise I.2.3** (first part). The inverse of a bijection is a
 bijection. -/

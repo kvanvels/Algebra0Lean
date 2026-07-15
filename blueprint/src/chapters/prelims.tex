@@ -69,6 +69,15 @@
   classes of some equivalence relation on $X$.
 \end{exercise}
 
+\begin{proposition}
+  \label{prop:prelims:bijective-setoid-classes}
+  \uses{def:prelims:is-partition, def:prelims:setoid-classes}
+  \lean{Algebra0Lean.Prelims.bijective_setoidClasses_subtype}
+  The notions of equivalence relation on $X$ and partition of $X$ are
+  really equivalent: \texttt{setoidClasses} is a bijection from
+  equivalence relations on $X$ to partitions of $X$.
+\end{proposition}
+
 \begin{exercise}[I.1.4]
   \label{exer:prelims:1.4}
   \lean{Algebra0Lean.Prelims.card_setoid_fin_eq_bell}
@@ -115,6 +124,65 @@
 
 \section{Functions between sets}
 \label{sec:prelims:functions-between-sets}
+
+\subsection{Definition}
+\label{subsec:prelims:functions:definition}
+
+\begin{definition}[Graph of a function]
+  \label{def:prelims:graph-of}
+  \lean{Algebra0Lean.Prelims.graphOf}
+  \leanok
+  The graph of $f : X \to Y$: the subset
+  $\Gamma_f = \{(a,b) \in X \times Y \mid b = f(a)\} \subseteq X \times Y$.
+\end{definition}
+
+\begin{definition}[Graph condition]
+  \label{def:prelims:is-graph}
+  \lean{Algebra0Lean.Prelims.IsGraph}
+  \leanok
+  A subset $\Gamma \subseteq X \times Y$ is (the graph of) a function
+  $X \to Y$ if every $a \in X$ has exactly one $b \in Y$ with
+  $(a,b) \in \Gamma$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:prelims:is-graph-graph-of}
+  \uses{def:prelims:graph-of, def:prelims:is-graph}
+  \lean{Algebra0Lean.Prelims.isGraph_graphOf}
+  The graph of a function satisfies the graph condition.
+\end{proposition}
+
+\begin{proposition}[A function really "is" its graph]
+  \label{prop:prelims:bijective-graph-of}
+  \uses{def:prelims:graph-of, def:prelims:is-graph,
+    prop:prelims:is-graph-graph-of}
+  \lean{Algebra0Lean.Prelims.bijective_graphOf}
+  Taking the graph is a bijection between functions $X \to Y$ and
+  subsets of $X \times Y$ satisfying the graph condition.
+\end{proposition}
+
+\subsection{Composition of functions}
+\label{subsec:prelims:composition-of-functions}
+
+\begin{proposition}
+  \label{prop:prelims:comp-assoc}
+  \lean{Algebra0Lean.Prelims.comp_assoc}
+  Composition of functions is associative: if $f : X \to Y$,
+  $g : Y \to Z$, $h : Z \to W$, then
+  $h \circ (g \circ f) = (h \circ g) \circ f$.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:id-comp}
+  \lean{Algebra0Lean.Prelims.id_comp}
+  For $f : X \to Y$, $\id_Y \circ f = f$.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:comp-id}
+  \lean{Algebra0Lean.Prelims.comp_id}
+  For $f : X \to Y$, $f \circ \id_X = f$.
+\end{proposition}
 
 \subsection{Injections, surjections, bijections}
 \label{subsec:prelims:injections-surjections-bijections}
@@ -176,6 +244,64 @@
   \uses{prop:prelims:inv-inj-sur}
   \leanok
 \end{proof}
+
+\begin{proposition}
+  \label{prop:prelims:no-right-inverse-of-injective-not-surjective}
+  \lean{Algebra0Lean.Prelims.not_hasRightInverse_of_injective_not_surjective}
+  If $f$ is injective but not surjective, it has no right-inverse.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:many-left-inverses}
+  \lean{Algebra0Lean.Prelims.exists_ne_leftInverse_of_injective_not_surjective}
+  If $f$ is injective but not surjective, and $X$ has at least two
+  elements, then $f$ has more than one left-inverse.
+\end{proposition}
+
+\begin{definition}[Section]
+  \label{def:prelims:is-section}
+  \lean{Algebra0Lean.Prelims.IsSection}
+  \leanok
+  A right-inverse of $f$ is also called a \emph{section} of $f$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:prelims:many-sections}
+  \uses{def:prelims:is-section}
+  \lean{Algebra0Lean.Prelims.exists_ne_section_of_surjective}
+  If $f$ is surjective and some fiber of $f$ has at least two
+  elements, then $f$ has more than one section.
+\end{proposition}
+
+\begin{definition}[Fiber]
+  \label{def:prelims:fiber}
+  \lean{Algebra0Lean.Prelims.fiber}
+  \leanok
+  The fiber of $f$ over $q \in Y$: the subset
+  $f^{-1}(q) = \{a \in X \mid f(a) = q\} \subseteq X$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:prelims:surjective-iff-fiber-nonempty}
+  \uses{def:prelims:fiber}
+  \lean{Algebra0Lean.Prelims.surjective_iff_forall_fiber_nonempty}
+  $f$ is surjective if and only if every fiber of $f$ is nonempty.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:injective-iff-fiber-subsingleton}
+  \uses{def:prelims:fiber}
+  \lean{Algebra0Lean.Prelims.injective_iff_forall_fiber_subsingleton}
+  $f$ is injective if and only if every fiber of $f$ has at most one
+  element.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:image-inverse-eq-preimage}
+  \lean{Algebra0Lean.Prelims.image_inverse_eq_preimage}
+  If $g$ is a two-sided inverse of $f$, then for every $T \subseteq Y$,
+  $g(T) = f^{-1}(T)$.
+\end{proposition}
 
 \subsection{Monomorphisms and epimorphisms}
 \label{subsec:prelims:functions:monomorphisms-and-epimorphisms}
