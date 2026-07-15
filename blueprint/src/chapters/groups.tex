@@ -109,6 +109,15 @@
 \end{proof}
 
 \begin{proposition}
+  \label{prop:groups:gzpow-add}
+  \uses{def:groups:powers}
+  \lean{Algebra0Lean.Groups.gzpow_add}
+  For $g \in G$ and $a, b \in \Z$, $g^{a+b} = g^a g^b$: the book's
+  stated form of the power-addition law, for all integer exponents
+  (not just $a, b \geq 0$).
+\end{proposition}
+
+\begin{proposition}
   \label{prop:groups:gpow-mul}
   \uses{def:groups:powers}
   \lean{Algebra0Lean.Groups.gpow_mul}

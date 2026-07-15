@@ -133,6 +133,13 @@ theorem gpow_add (𝔾 : Group G) (g : G) (a b : ℕ) :
       show 𝔾.op (gpow 𝔾 g (a + b)) g = 𝔾.op (gpow 𝔾 g a) (𝔾.op (gpow 𝔾 g b) g)
       rw [ih, 𝔾.assoc]
 
+/-- Powers add for integer exponents too: `g^(a+b) = g^a ⋆ g^b` for
+`a b : ℤ` (the book's stated form of the law, right after introducing
+powers). -/
+theorem gzpow_add (𝔾 : Group G) (g : G) (a b : ℤ) :
+    gzpow 𝔾 g (a + b) = 𝔾.op (gzpow 𝔾 g a) (gzpow 𝔾 g b) := by
+  sorry
+
 /-- Powers multiply: `g^(ab) = (g^a)^b`. -/
 theorem gpow_mul (𝔾 : Group G) (g : G) (a b : ℕ) :
     gpow 𝔾 g (a * b) = gpow 𝔾 (gpow 𝔾 g a) b := by
