@@ -44,16 +44,24 @@
   \label{prop:prelims:partition-eq-or-disjoint}
   \uses{def:prelims:is-partition}
   \lean{Algebra0Lean.Prelims.eq_or_disjoint_of_isPartition}
+  \leanok
   Any two members of a partition $c$ of $X$ are either equal or
   disjoint.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{proposition}
   \label{prop:prelims:partition-not-disjoint-iff-eq}
   \uses{def:prelims:is-partition}
   \lean{Algebra0Lean.Prelims.not_disjoint_iff_eq_of_isPartition}
+  \leanok
   For $s, t \in c$: $s$ and $t$ overlap if and only if $s = t$.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{definition}[Equivalence classes]
   \label{def:prelims:setoid-classes}
@@ -78,11 +86,16 @@
 
 \begin{exercise}[I.1.3]
   \label{exer:prelims:1.3}
-  \uses{def:prelims:is-partition, def:prelims:setoid-classes}
+  \uses{def:prelims:is-partition, def:prelims:setoid-classes,
+    prop:prelims:partition-not-disjoint-iff-eq}
   \lean{Algebra0Lean.Prelims.exists_setoid_of_isPartition}
+  \leanok
   Conversely, every partition of $X$ arises as the set of equivalence
   classes of some equivalence relation on $X$.
 \end{exercise}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{proposition}
   \label{prop:prelims:bijective-setoid-classes}
@@ -333,16 +346,44 @@
   \label{prop:prelims:injective-iff-fiber-subsingleton}
   \uses{def:prelims:fiber}
   \lean{Algebra0Lean.Prelims.injective_iff_forall_fiber_subsingleton}
+  \leanok
   $f$ is injective if and only if every fiber of $f$ has at most one
   element.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{proposition}
   \label{prop:prelims:image-inverse-eq-preimage}
   \lean{Algebra0Lean.Prelims.image_inverse_eq_preimage}
+  \leanok
   If $g$ is a two-sided inverse of $f$, then for every $T \subseteq Y$,
   $g(T) = f^{-1}(T)$.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{exercise}[I.2.3, first part]
+  \label{exer:prelims:2.3-inv-fun}
+  \lean{Algebra0Lean.Prelims.bijective_invFun}
+  \leanok
+  If $f$ is a bijection, then so is its inverse.
+\end{exercise}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{exercise}[I.2.3, second part]
+  \label{exer:prelims:2.3-comp}
+  \lean{Algebra0Lean.Prelims.bijective_comp}
+  \leanok
+  The composite of two bijections is a bijection.
+\end{exercise}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \subsection{Monomorphisms and epimorphisms}
 \label{subsec:prelims:functions:monomorphisms-and-epimorphisms}

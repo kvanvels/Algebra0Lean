@@ -109,13 +109,40 @@ is really an exclusive or, since a nonempty set can't be disjoint from
 itself, but Lean's standard library has little use for a dedicated
 `Xor` connective, so we state it as a plain `∨`.) -/
 theorem eq_or_disjoint_of_isPartition {c : Set (Set X)} (hc : IsPartition c) :
-     ∀ s t : Set X, s ∈ c → t∈ c → s = t ∨ Disjoint s t := by
-  sorry
+     ∀ s ∈ c, ∀ t ∈ c, s = t ∨ Disjoint s t := by
+   intro s hs t ht
+   rw [isPartition_iff_pairwiseDisjoint_cover] at hc
+   rcases hc with ⟨hc0,hc1,hc2⟩
+   specialize hc1 s hs t ht
+   contrapose! hc1
+   exact hc1
+      
+   
+  
 
 /-- In a partition, two members overlap exactly when they are equal. -/
 theorem not_disjoint_iff_eq_of_isPartition {c : Set (Set X)} (hc : IsPartition c) :
     ∀ s ∈ c, ∀ t ∈ c, ¬ Disjoint s t ↔ s = t := by
-  sorry
+  have h1 := eq_or_disjoint_of_isPartition hc
+  intro s hs t ht
+  specialize h1 s hs t ht
+  apply Iff.intro
+  intro h0
+  rcases h1 with (h1|h1)
+  exact h1
+  exact False.elim (h0 h1)
+  
+  intro h0
+  rw [Set.not_disjoint_iff]
+  have h1 : s ≠ ∅ := fun h => hc.1 (h ▸ hs)
+  rcases Set.nonempty_iff_ne_empty.mpr h1 with ⟨x, hx⟩
+  exact ⟨x, hx, h0 ▸ hx⟩
+  
+  
+  
+
+  
+
 
 /-- The set of equivalence classes of a setoid on `X`. -/
 def setoidClasses (r : Setoid X) : Set (Set X) :=
@@ -417,6 +444,9 @@ theorem exists_ne_leftInverse_of_injective_not_surjective {f : X → Y}
     ∃ g₁ g₂ : Y → X, Function.LeftInverse g₁ f ∧ Function.LeftInverse g₂ f ∧ g₁ ≠ g₂ := by
   sorry
 
+
+
+/- NOTE: No realy purpose of this is there? -/
 /-- A right-inverse of `f` is also called a *section* of `f`. -/
 def IsSection (f : X → Y) (g : Y → X) : Prop := Function.RightInverse g f
 
@@ -440,39 +470,104 @@ theorem surjective_iff_forall_fiber_nonempty (f : X → Y) :
 one element). -/
 theorem injective_iff_forall_fiber_subsingleton (f : X → Y) :
     Function.Injective f ↔ ∀ q : Y, (fiber f q).Subsingleton := by
-  sorry
+  apply Iff.intro
+  · intro h0 z
+    unfold fiber
+    intro x (hx : f x = z) y (hy : f y = z)
+    apply h0
+    rw [hx]
+    exact hy.symm
+  intro h0 x0 x1 h1  
+  specialize h0 (f x0)
+  have h2 := @h0 x0 rfl x1 (by rw [h1]; rfl)
+  exact h2
+  
 
 /-- For a bijective `f` with two-sided inverse `g`, the forward image
 under `g` of a subset agrees with the preimage under `f`. -/
 theorem image_inverse_eq_preimage {f : X → Y} {g : Y → X}
     (hgl : Function.LeftInverse g f) (hgr : Function.RightInverse g f) (T : Set Y) :
     g '' T = f ⁻¹' T := by
-  sorry
+  apply subset_antisymm
+  intro x ⟨y,hy0,hy1⟩
+  rw [←hy1]
+  show f (g y) ∈ T
+  have h1 : f (g y) = y := hgr y
+  rwa [h1]
+  intro x (hx : f x ∈ T)
+  use (f x)
+  apply And.intro hx
+  exact hgl x
+  
+  
+
 
 /-- **Exercise I.2.3** (first part). The inverse of a bijection is a
 bijection. -/
 theorem bijective_invFun [Nonempty X] {f : X → Y} (hf : Function.Bijective f) :
     Function.Bijective (Function.invFun f) := by
-  sorry
+  rcases hf with ⟨hf1,hf2⟩
+  constructor
+  · intro y0 y1 h0
+    have h2 := by calc
+      y0 = f (Function.invFun f y0) := by exact (Function.invFun_eq (hf2 y0)).symm
+       _ = f (Function.invFun f y1) := by rw [h0]
+       _ = y1 := by exact Function.invFun_eq (hf2 y1)
+    exact h2
+  · intro x
+    use (f x)
+    exact Function.leftInverse_invFun hf1 x
+
 
 /-- **Exercise I.2.3** (second part). The composite of two bijections
 is a bijection. -/
 theorem bijective_comp {Z : Type*} {f : X → Y} {g : Y → Z}
     (hf : Function.Bijective f) (hg : Function.Bijective g) :
     Function.Bijective (g ∘ f) := by
-  sorry
+  rcases hf with ⟨hfInj,hfSurj⟩
+  rcases hg with ⟨hgInj,hgSurj⟩
+  apply And.intro
+  intro x0 x1 hgf01
+  apply hfInj 
+  apply hgInj
+  exact hgf01
+  intro z
+  rcases hgSurj z with ⟨y,hz⟩
+  rcases hfSurj y with ⟨x,hy⟩
+  use x
+  rw [←hz,←hy]
+  rfl
 
 /-- **Exercise I.2.4** (first part). Isomorphism of sets is
 reflexive, symmetric, and transitive. -/
-theorem isomorphic_refl (A : Type*) : Isomorphic A A := by
-  sorry
+theorem isomorphic_refl : IsReflexive Isomorphic := by
+   intro A
+   use id
+   use id
+   exact (fun x => rfl)
+   exact (fun x => rfl)
 
-theorem isomorphic_symm {A B : Type*} (h : Isomorphic A B) : Isomorphic B A := by
-  sorry
 
-theorem isomorphic_trans {A B C : Type*} (h1 : Isomorphic A B) (h2 : Isomorphic B C) :
-    Isomorphic A C := by
-  sorry
+theorem isomorphic_symm : IsSymmetric Isomorphic := by
+  intro A B h
+  rcases h with ⟨T,Tinv,hT0,hT1⟩
+  use Tinv, T
+  intro b
+  exact hT1 b
+  intro a
+  exact hT0 a
+
+
+theorem isomorphic_trans : IsTransitive Isomorphic := by
+  intro A B C ⟨fAB,finvAB,hAB0,hAB1⟩  ⟨fBC,finvBC,hBC0,hBC1⟩
+  use (fBC ∘ fAB), (finvAB ∘ finvBC)
+  intro a
+  simp only [Function.comp_apply]
+  rw [hBC0 (fAB a),hAB0 a]
+  intro c
+  simp only [Function.comp_apply]
+  rw [hAB1 (finvBC c),hBC1 c]
+  
 
 /-- **Exercise I.2.7.** The graph of `f : X → Y` is isomorphic to
 `X`. -/
@@ -667,15 +762,24 @@ def preorderCategory {S : Type u} {r : S → S → Prop}
   Hom a b := PLift (r a b)
   id a := ⟨hrefl a⟩
   comp g f := ⟨htrans _ _ _ f.down g.down⟩
-  comp_assoc := by sorry
-  id_comp := by sorry
-  comp_id := by sorry
+  comp_assoc := by
+    intro A B C D f g h
+    rfl
+
+  id_comp := by
+    intros
+    rfl
+  comp_id := by
+    intros
+    rfl
 
 /-- **Discrete categories.** The category induced (via
 `preorderCategory`) by the equality relation on `S`: the only
 morphisms are the identities. -/
 def discreteCategory (S : Type u) : Category.{u, 0} :=
-  preorderCategory (S := S) (r := Eq) (by sorry) (by sorry)
+  preorderCategory (S := S) (r := Eq)
+  ((congrFun ∘ fun a ↦ a) rfl)
+  (@Trans.trans S S S Eq Eq Eq (instTransEq Eq))
 
 /-- **The category of a preorder.** Given a preorder `≤` on `S`
 (e.g. `ℤ` with its usual order), the induced category. -/
