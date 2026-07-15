@@ -41,6 +41,19 @@
 \end{definition}
 
 \begin{proposition}
+  \label{prop:prelims:is-partition-iff-pairwise-disjoint-cover}
+  \uses{def:prelims:is-partition}
+  \lean{Algebra0Lean.Prelims.isPartition_iff_pairwiseDisjoint_cover}
+  \leanok
+  A set $c$ of subsets of $X$ satisfies $\emptyset \notin c$ and "every
+  element of $X$ lies in exactly one member of $c$" if and only if its
+  members are pairwise disjoint and their union is all of $X$.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{proposition}
   \label{prop:prelims:partition-eq-or-disjoint}
   \uses{def:prelims:is-partition}
   \lean{Algebra0Lean.Prelims.eq_or_disjoint_of_isPartition}
@@ -235,8 +248,12 @@
 \begin{proposition}
   \label{prop:prelims:comp-id}
   \lean{Algebra0Lean.Prelims.comp_id}
+  \leanok
   For $f : X \to Y$, $f \circ \id_X = f$.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \subsection{Injections, surjections, bijections}
 \label{subsec:prelims:injections-surjections-bijections}
@@ -343,8 +360,12 @@
   \label{prop:prelims:surjective-iff-fiber-nonempty}
   \uses{def:prelims:fiber}
   \lean{Algebra0Lean.Prelims.surjective_iff_forall_fiber_nonempty}
+  \leanok
   $f$ is surjective if and only if every fiber of $f$ is nonempty.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{proposition}
   \label{prop:prelims:injective-iff-fiber-subsingleton}
@@ -464,6 +485,17 @@
   quotient by the kernel pair of $f$.
 \end{definition}
 
+\begin{proposition}
+  \label{prop:prelims:canonical-projection-surjective}
+  \uses{def:prelims:canonical-projection}
+  \lean{Algebra0Lean.Prelims.canonicalProjection_surjective}
+  \leanok
+  The canonical projection is surjective.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
 \begin{definition}[Canonical bijection]
   \label{def:prelims:canonical-bijection}
   \uses{def:prelims:kernel-pair-setoid}
@@ -472,12 +504,34 @@
   The induced bijection $X/{\sim} \to \image f$.
 \end{definition}
 
+\begin{proposition}
+  \label{prop:prelims:canonical-bijection-bijective}
+  \uses{def:prelims:canonical-bijection}
+  \lean{Algebra0Lean.Prelims.canonicalBijection_bijective}
+  \leanok
+  The canonical bijection really is a bijection.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
+
 \begin{definition}[Canonical inclusion]
   \label{def:prelims:canonical-inclusion}
   \lean{Algebra0Lean.Prelims.canonicalInclusion}
   \leanok
   The inclusion $\image f \hookrightarrow Y$.
 \end{definition}
+
+\begin{proposition}
+  \label{prop:prelims:canonical-inclusion-injective}
+  \uses{def:prelims:canonical-inclusion}
+  \lean{Algebra0Lean.Prelims.canonicalInclusion_injective}
+  \leanok
+  The canonical inclusion is injective.
+\end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{theorem}[I.2.8, canonical decomposition]
   \label{thm:prelims:canonical-decomposition}

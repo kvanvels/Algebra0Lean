@@ -506,7 +506,22 @@ def fiber (f : X → Y) (q : Y) : Set X := {a : X | f a = q}
 /-- `f` is surjective iff every fiber is nonempty. -/
 theorem surjective_iff_forall_fiber_nonempty (f : X → Y) :
     Function.Surjective f ↔ ∀ q : Y, (fiber f q).Nonempty := by
-  sorry
+  apply Iff.intro
+  intro h0
+  intro q
+  specialize h0 q
+  rcases h0 with ⟨a,h0⟩
+  use a  
+  exact h0
+  intro h0 y
+  specialize h0 y
+  rcases h0 with ⟨a,h0⟩
+  use a
+  exact h0
+  
+  
+  
+  
 
 /-- `f` is injective iff every fiber is a subsingleton (has at most
 one element). -/
