@@ -40,6 +40,21 @@
   one member of $c$.
 \end{definition}
 
+\begin{proposition}
+  \label{prop:prelims:partition-eq-or-disjoint}
+  \uses{def:prelims:is-partition}
+  \lean{Algebra0Lean.Prelims.eq_or_disjoint_of_isPartition}
+  Any two members of a partition $c$ of $X$ are either equal or
+  disjoint.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:partition-not-disjoint-iff-eq}
+  \uses{def:prelims:is-partition}
+  \lean{Algebra0Lean.Prelims.not_disjoint_iff_eq_of_isPartition}
+  For $s, t \in c$: $s$ and $t$ overlap if and only if $s = t$.
+\end{proposition}
+
 \begin{definition}[Equivalence classes]
   \label{def:prelims:setoid-classes}
   \uses{def:prelims:is-partition}
@@ -112,14 +127,24 @@
   \Z$.
 \end{definition}
 
-\begin{exercise}[I.1.6]
-  \label{exer:prelims:1.6}
-  \uses{def:prelims:mod-z-relation, def:prelims:mod-z-relation-plane}
-  \lean{Algebra0Lean.Prelims.equivalence_modZRelation,
-        Algebra0Lean.Prelims.equivalence_modZRelationPlane}
+\begin{exercise}[I.1.6, first part]
+  \label{exer:prelims:1.6a}
+  \uses{def:prelims:mod-z-relation}
+  \lean{Algebra0Lean.Prelims.equivalence_modZRelation}
+  \leanok
   The relation $a \sim b \iff b - a \in \Z$ is an equivalence relation
-  on $\R$, and likewise for the corresponding relation on $\R \times
-  \R$.
+  on $\R$.
+\end{exercise}
+\begin{proof}
+  \leanok
+\end{proof}
+
+\begin{exercise}[I.1.6, second part]
+  \label{exer:prelims:1.6b}
+  \uses{def:prelims:mod-z-relation-plane}
+  \lean{Algebra0Lean.Prelims.equivalence_modZRelationPlane}
+  Likewise, the corresponding relation on $\R \times \R$ is an
+  equivalence relation.
 \end{exercise}
 
 \section{Functions between sets}
@@ -149,8 +174,12 @@
   \label{prop:prelims:is-graph-graph-of}
   \uses{def:prelims:graph-of, def:prelims:is-graph}
   \lean{Algebra0Lean.Prelims.isGraph_graphOf}
+  \leanok
   The graph of a function satisfies the graph condition.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{proposition}[A function really "is" its graph]
   \label{prop:prelims:bijective-graph-of}
@@ -167,16 +196,24 @@
 \begin{proposition}
   \label{prop:prelims:comp-assoc}
   \lean{Algebra0Lean.Prelims.comp_assoc}
+  \leanok
   Composition of functions is associative: if $f : X \to Y$,
   $g : Y \to Z$, $h : Z \to W$, then
   $h \circ (g \circ f) = (h \circ g) \circ f$.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{proposition}
   \label{prop:prelims:id-comp}
   \lean{Algebra0Lean.Prelims.id_comp}
+  \leanok
   For $f : X \to Y$, $\id_Y \circ f = f$.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{proposition}
   \label{prop:prelims:comp-id}
@@ -198,8 +235,12 @@
 \begin{proposition}
   \label{prop:prelims:bijective-id}
   \lean{Algebra0Lean.Prelims.bijective_id}
+  \leanok
   The identity function $\id_X : X \to X$ is a bijection.
 \end{proposition}
+\begin{proof}
+  \leanok
+\end{proof}
 
 \begin{proposition}
   \label{prop:prelims:finite-card-eq-of-isomorphic}

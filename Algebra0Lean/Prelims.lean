@@ -104,6 +104,19 @@ theorem isPartition_iff_pairwiseDisjoint_cover (c : Set (Set X)) :
     rw [Set.singleton_subset_iff]
     exact Set.notMem_empty a
 
+/-- Any two members of a partition are either equal or disjoint. (This
+is really an exclusive or, since a nonempty set can't be disjoint from
+itself, but Lean's standard library has little use for a dedicated
+`Xor` connective, so we state it as a plain `∨`.) -/
+theorem eq_or_disjoint_of_isPartition {c : Set (Set X)} (hc : IsPartition c) :
+     ∀ s t : Set X, s ∈ c → t∈ c → s = t ∨ Disjoint s t := by
+  sorry
+
+/-- In a partition, two members overlap exactly when they are equal. -/
+theorem not_disjoint_iff_eq_of_isPartition {c : Set (Set X)} (hc : IsPartition c) :
+    ∀ s ∈ c, ∀ t ∈ c, ¬ Disjoint s t ↔ s = t := by
+  sorry
+
 /-- The set of equivalence classes of a setoid on `X`. -/
 def setoidClasses (r : Setoid X) : Set (Set X) :=
   {s : Set X | ∃ y : X, s = {x : X | x ≈ y}}
@@ -161,7 +174,53 @@ theorem isPartition_setoidClasses (r : Setoid X) :
 equivalence classes of some equivalence relation on `X`. -/
 theorem exists_setoid_of_isPartition {c : Set (Set X)} (hc : IsPartition c) :
     ∃ r : Setoid X, setoidClasses r = c := by
-  sorry
+  have eqOfMem : ∀ {U V : Set X} {p : X}, U ∈ c → V ∈ c → p ∈ U → p ∈ V → U = V := by
+    intro U V p hU hV hpU hpV
+    exact (not_disjoint_iff_eq_of_isPartition hc U hU V hV).mp
+      (fun hd => hd.notMem_of_mem_left hpU hpV)
+  rw [isPartition_iff_pairwiseDisjoint_cover] at hc
+  rcases hc with ⟨hc0,hc1,hc2⟩
+  letI τ : Setoid X := {
+    r := fun x y ↦ ∃ U ∈ c, x ∈ U ∧ y ∈ U
+    iseqv := {
+      refl := by
+        intro x
+        rcases hc2 x with ⟨U,hU⟩
+        use U
+        apply And.intro hU.1 (And.intro hU.2 hU.2)
+      symm := by
+        rintro x y ⟨r,h0⟩
+        use r
+        apply And.intro h0.1 (And.intro h0.2.2 h0.2.1)
+      trans := by
+        intro x y z hxy hyz
+        rcases hxy with ⟨Uxy,hUxy⟩
+        rcases hyz with ⟨Uyz,hUyz⟩
+        have h1 : Uxy = Uyz := eqOfMem hUxy.1 hUyz.1 hUxy.2.2 hUyz.2.1
+        use Uxy
+        apply And.intro hUxy.1 (And.intro hUxy.2.1 _)
+        rw [h1]
+        exact hUyz.2.2
+    }
+  }
+  have classOf : ∀ {U : Set X} {p : X}, U ∈ c → p ∈ U → U = {x | x ≈ p} := by
+    intro U p hU hp
+    apply subset_antisymm
+    · intro x hx
+      exact ⟨U, hU, hx, hp⟩
+    · rintro x ⟨V, hV, hxV, hpV⟩
+      exact eqOfMem hV hU hpV hp ▸ hxV
+  use τ
+  unfold setoidClasses
+  apply subset_antisymm
+  · rintro s ⟨ys, hs1⟩
+    rcases hc2 ys with ⟨σ, hσ⟩
+    have hσs : σ = s := (classOf hσ.1 hσ.2).trans hs1.symm
+    exact hσs ▸ hσ.1
+  · rintro T hT
+    rcases Set.nonempty_iff_ne_empty.mpr (fun h => hc0 (h ▸ hT)) with ⟨ℓ, hℓ⟩
+    exact ⟨ℓ, classOf hT hℓ⟩
+
 
 /-- The notions of "equivalence relation on `X`" and "partition of
 `X`" are really equivalent: `setoidClasses` is a bijection from
@@ -189,8 +248,25 @@ def modZRelation (a b : ℝ) : Prop := ∃ k : ℤ, b - a = (k : ℝ)
 
 /-- **Exercise I.1.6** (first part). `modZRelation` is an equivalence
 relation on `ℝ`. -/
-theorem equivalence_modZRelation : Equivalence modZRelation := by
-  sorry
+theorem equivalence_modZRelation : Equivalence modZRelation := {
+  refl := by
+    intro x
+    use 0
+    simp only [sub_self, Int.cast_zero]
+  symm := by
+    intro x y ⟨k,hkxy⟩
+    use -k
+    simp only [Int.cast_neg]
+    rw [←hkxy,neg_sub]
+  trans := by
+    intro x y z ⟨k,hkxy⟩ ⟨ℓ,hlyz⟩
+    use (k + ℓ)
+    simp only [Int.cast_add]
+    rw [←hkxy,←hlyz]
+    ring_nf
+}
+
+
 
 /-- The relation on `ℝ × ℝ` identifying points that differ by an
 integer vector in each coordinate. -/
@@ -201,6 +277,7 @@ def modZRelationPlane (a b : ℝ × ℝ) : Prop :=
 equivalence relation on `ℝ × ℝ`. -/
 theorem equivalence_modZRelationPlane : Equivalence modZRelationPlane := by
   sorry
+
 
 end EquivalenceRelationsAndPartitions
 
@@ -219,7 +296,14 @@ def IsGraph (Γ : Set (X × Y)) : Prop := ∀ a : X, ∃! b : Y, (a, b) ∈ Γ
 
 /-- The graph of a function satisfies `IsGraph`. -/
 theorem isGraph_graphOf (f : X → Y) : IsGraph (graphOf f) := by
-  sorry
+  intro x
+  unfold graphOf
+  use (f x)
+  dsimp
+  apply And.intro rfl
+  intro y h0
+  exact h0
+
 
 /-- **A function really "is" its graph.** `graphOf` is a bijection
 between functions `X → Y` and subsets of `X × Y` satisfying
@@ -231,22 +315,39 @@ theorem bijective_graphOf :
 
 /-- Composition of functions is associative. -/
 theorem comp_assoc : Associative (@Function.comp) := by
-  sorry
+  intro A B C D f g h
+  apply funext
+  intro x
+  simp only [Function.comp_apply]
+  
+
 
 /-- The identity function is a left unit for composition. -/
 theorem id_comp (f : X → Y) : (id : Y → Y) ∘ f = f := by
-  sorry
+  apply funext
+  intro x
+  simp only [Function.comp_apply,id_eq]
+    
 
 /-- The identity function is a right unit for composition. -/
 theorem comp_id (f : X → Y) : f ∘ (id : X → X) = f := by
-  sorry
+  apply funext
+  intro x
+  simp only [Function.comp_apply,id_eq]
+  
 
 /-- Two types are isomorphic if there is a bijection between them. -/
 def Isomorphic (A B : Type*) : Prop := Nonempty (A ≃ B)
 
 /-- The identity function is a bijection. -/
 theorem bijective_id : Function.Bijective (id : X → X) := by
-  sorry
+  constructor
+  · intro x0 x1 h0
+    rwa [id_eq,id_eq] at h0
+  intro y
+  use y
+  rw [id_eq]
+  
 
 /-- If `X` is finite and isomorphic to `Y`, then `Y` is finite too, and
 `X`, `Y` have the same cardinality. -/
