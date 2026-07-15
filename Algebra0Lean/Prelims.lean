@@ -6,6 +6,9 @@ import Mathlib.Data.Quot
 import Mathlib.Order.RelClasses
 import Mathlib.Tactic.ByContra
 import Mathlib.Data.Set.Basic
+import Mathlib.Combinatorics.Enumerative.Bell
+import Mathlib.Data.Real.Basic
+import Mathlib.SetTheory.Cardinal.Finite
 
 /-!
 # Chapter I: Preliminaries — Set theory and categories
@@ -19,6 +22,17 @@ namespace Algebra0Lean.Prelims
 section EquivalenceRelationsAndPartitions
 
 variable {X : Type*}
+
+/-- A relation `r` on `X` is reflexive if every element is related to
+itself. -/
+def IsReflexive (r : X → X → Prop) : Prop := ∀ x, r x x
+
+/-- A relation `r` on `X` is symmetric if `r x y` implies `r y x`. -/
+def IsSymmetric (r : X → X → Prop) : Prop := ∀ x y, r x y → r y x
+
+/-- A relation `r` on `X` is transitive if `r x y` and `r y z` imply
+`r x z`. -/
+def IsTransitive (r : X → X → Prop) : Prop := ∀ x y z, r x y → r y z → r x z
 
 /-- A partition of `X`: a set of nonempty subsets of `X`, every element
 of which lies in exactly one of them. -/
@@ -40,7 +54,7 @@ theorem isPartition_iff_pairwiseDisjoint_cover (c : Set (Set X)) :
       show θ ⊆ ∅
       intro χ hχ
       rcases h1 χ with ⟨L,⟨hL0,hL1⟩,hL2⟩
-      have ht := hL2 t ⟨ht,hθt hχ⟩ 
+      have ht := hL2 t ⟨ht,hθt hχ⟩
       have hs := hL2 s ⟨hs,hθs hχ⟩
       rw [←ht] at hs
       exact False.elim (hst hs)
@@ -50,7 +64,7 @@ theorem isPartition_iff_pairwiseDisjoint_cover (c : Set (Set X)) :
   intro ⟨h0,h1,h2⟩
   apply And.intro h0
   · intro a
-    rcases h2 a with ⟨s,hs⟩ 
+    rcases h2 a with ⟨s,hs⟩
     use s
     apply And.intro hs
     intro t ⟨ht0,ht1⟩
@@ -58,7 +72,7 @@ theorem isPartition_iff_pairwiseDisjoint_cover (c : Set (Set X)) :
     contrapose! h1
     apply And.intro
     exact h1.symm
-    
+
     unfold Disjoint
     push Not
     use {a}
@@ -69,7 +83,7 @@ theorem isPartition_iff_pairwiseDisjoint_cover (c : Set (Set X)) :
       rw [←hχ] at hs
       exact hs.2
     apply And.intro
-    · intro χ hχ 
+    · intro χ hχ
       rw [Set.mem_singleton_iff] at hχ
       rwa [←hχ] at ht1
     change ¬( ({a}:Set X) ⊆ ∅)
@@ -90,7 +104,6 @@ theorem isPartition_setoidClasses (r : Setoid X) :
   dsimp at h0
   rcases h0 with ⟨y,hy⟩
   let P : Set X := {x | x ≈ y}
-  
   have h1 : P ⊆ ∅ := by
     rw [hy]
   have h2 : y ∈ P := by
@@ -112,7 +125,6 @@ theorem isPartition_setoidClasses (r : Setoid X) :
   intro Q ⟨hQ0,hQ1⟩
   unfold setoidClasses at hQ0
   rcases hQ0 with ⟨q,hQ0⟩
-  
   apply subset_antisymm
   intro z hz
   have h1 : z ≈ y := by
@@ -135,6 +147,36 @@ theorem isPartition_setoidClasses (r : Setoid X) :
 equivalence classes of some equivalence relation on `X`. -/
 theorem exists_setoid_of_isPartition {c : Set (Set X)} (hc : IsPartition c) :
     ∃ r : Setoid X, setoidClasses r = c := by
+  sorry
+
+/-- **Exercise I.1.4** (generalized to `n` elements). The number of
+equivalence relations on a set of `n` elements is the `n`th Bell number. -/
+theorem card_setoid_fin_eq_bell (n : ℕ) :
+    Nat.card (Setoid (Fin n)) = Nat.bell n := by
+  sorry
+
+/-- **Exercise I.1.5.** There is a relation that is reflexive and
+symmetric but not transitive. -/
+theorem exists_reflexive_symmetric_not_transitive :
+    ∃ (Y : Type) (r : Y → Y → Prop), IsReflexive r ∧ IsSymmetric r ∧ ¬ IsTransitive r := by
+  sorry
+
+/-- The relation `a ∼ b ↔ b - a ∈ ℤ` on `ℝ`. -/
+def modZRelation (a b : ℝ) : Prop := ∃ k : ℤ, b - a = (k : ℝ)
+
+/-- **Exercise I.1.6** (first part). `modZRelation` is an equivalence
+relation on `ℝ`. -/
+theorem equivalence_modZRelation : Equivalence modZRelation := by
+  sorry
+
+/-- The relation on `ℝ × ℝ` identifying points that differ by an
+integer vector in each coordinate. -/
+def modZRelationPlane (a b : ℝ × ℝ) : Prop :=
+  modZRelation a.1 b.1 ∧ modZRelation a.2 b.2
+
+/-- **Exercise I.1.6** (second part). `modZRelationPlane` is an
+equivalence relation on `ℝ × ℝ`. -/
+theorem equivalence_modZRelationPlane : Equivalence modZRelationPlane := by
   sorry
 
 end EquivalenceRelationsAndPartitions
