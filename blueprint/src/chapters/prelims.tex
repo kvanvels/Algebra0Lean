@@ -396,3 +396,575 @@
 \begin{proof}
   \leanok
 \end{proof}
+
+\section{Categories}
+\label{sec:prelims:categories}
+
+\subsection{Definition}
+\label{subsec:prelims:categories:definition}
+
+\begin{definition}[Category]
+  \label{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category}
+  \leanok
+  A category $\categ{C}$: a type of objects, a type of morphisms
+  between each pair of objects, identities, and an associative,
+  unital composition law.
+\end{definition}
+
+\begin{definition}[Small category]
+  \label{def:prelims:category-is-small}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category.IsSmall}
+  \leanok
+  A category is small (relative to a universe) if its class of
+  objects is actually (equivalent to) a set.
+\end{definition}
+
+\begin{definition}[Endomorphism]
+  \label{def:prelims:category-end}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category.End}
+  \leanok
+  The endomorphisms $\End_{\categ{C}}(A)$ of an object $A$: morphisms
+  from $A$ to itself.
+\end{definition}
+
+\subsection{Examples}
+\label{subsec:prelims:examples}
+
+\begin{definition}[The category of types]
+  \label{def:prelims:type-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.typeCategory}
+  \leanok
+  The category $\categ{Set}$: objects are types, morphisms are
+  functions.
+\end{definition}
+
+\begin{definition}[The category induced by a preorder]
+  \label{def:prelims:preorder-category}
+  \uses{def:prelims:category, def:prelims:is-reflexive, def:prelims:is-transitive}
+  \lean{Algebra0Lean.Prelims.preorderCategory}
+  \leanok
+  Given a reflexive, transitive relation $\sim$ on $S$, the category
+  with objects $S$ and exactly one morphism $a \to b$ when $a \sim b$
+  (and none otherwise).
+\end{definition}
+
+\begin{definition}[Discrete categories]
+  \label{def:prelims:discrete-category}
+  \uses{def:prelims:preorder-category}
+  \lean{Algebra0Lean.Prelims.discreteCategory}
+  \leanok
+  The category induced (via the preorder-category construction) by
+  the equality relation on $S$: the only morphisms are the
+  identities.
+\end{definition}
+
+\begin{definition}[The category of a preorder]
+  \label{def:prelims:le-category}
+  \uses{def:prelims:preorder-category}
+  \lean{Algebra0Lean.Prelims.leCategory}
+  \leanok
+  Given a preorder $\leq$ on $S$ (e.g.\ $\Z$ with its usual order),
+  the induced category.
+\end{definition}
+
+\begin{definition}[Slice category]
+  \label{def:prelims:slice-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.sliceCategory}
+  \leanok
+  Given a category $\categ{C}$ and an object $A$, the category
+  $\categ{C}_A$ of morphisms into $A$.
+\end{definition}
+
+\begin{definition}[Coslice category]
+  \label{def:prelims:coslice-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.coSliceCategory}
+  \leanok
+  Given a category $\categ{C}$ and an object $A$, the category
+  $\categ{C}^A$ of morphisms out of $A$.
+\end{definition}
+
+\begin{definition}[Pointed sets]
+  \label{def:prelims:pointed-set-category}
+  \uses{def:prelims:coslice-category, def:prelims:type-category}
+  \lean{Algebra0Lean.Prelims.pointedSetCategory}
+  \leanok
+  The category $\categ{Set}^*$ of pointed sets, obtained as the
+  coslice category of $\categ{Set}$ under the singleton type.
+\end{definition}
+
+\begin{definition}[Two-leg category]
+  \label{def:prelims:two-leg-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.twoLegCategory}
+  \leanok
+  Given a category $\categ{C}$ and two objects $A$, $B$, the category
+  $\categ{C}_{A,B}$ of pairs of morphisms into $A$ and $B$ from a
+  common source.
+\end{definition}
+
+\begin{definition}[Two-leg co-category]
+  \label{def:prelims:two-leg-co-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.twoLegCoCategory}
+  \leanok
+  The mirror of the two-leg category: the category
+  $\categ{C}^{A,B}$ of pairs of morphisms out of $A$ and $B$ into a
+  common target.
+\end{definition}
+
+\begin{definition}[Fibered category]
+  \label{def:prelims:fibered-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.fiberedCategory}
+  \leanok
+  Given a category $\categ{C}$ and two morphisms $\alpha : A \to T$,
+  $\beta : B \to T$ with common target, the category
+  $\categ{C}_{\alpha,\beta}$ of commuting pairs $(f : Z \to A, g : Z
+  \to B)$ with $\alpha f = \beta g$.
+\end{definition}
+
+\subsection*{Exercises}
+
+\begin{definition}[Opposite category]
+  \label{def:prelims:op-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category.op}
+  \leanok
+  The opposite category $\categ{C}^{\mathrm{op}}$: same objects, with
+  $\Hom$ reversed.
+\end{definition}
+
+\begin{exercise}
+  \label{exer:prelims:card-end-type-category}
+  \uses{def:prelims:type-category, def:prelims:category-end}
+  \lean{Algebra0Lean.Prelims.card_end_typeCategory}
+  How large is $\End_{\categ{Set}}(A)$ for a finite set $A$?
+\end{exercise}
+
+\begin{exercise}
+  \label{exer:prelims:no-category-strict-ineq}
+  \uses{def:prelims:is-reflexive}
+  \lean{Algebra0Lean.Prelims.not_isReflexive_lt_int}
+  Can we define a category in the style of the preorder-category
+  construction using the relation $<$ on $\Z$? (No: $<$ is not
+  reflexive.)
+\end{exercise}
+
+\begin{definition}[Category of matrices]
+  \label{def:prelims:matrix-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.matrixCategory}
+  \leanok
+  Objects are natural numbers; morphisms $n \to m$ are $m \times n$
+  real matrices, with composition given by matrix multiplication.
+\end{definition}
+
+\begin{definition}[Subcategory]
+  \label{def:prelims:subcategory}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Subcategory}
+  \leanok
+  A subcategory of $\categ{C}$: a predicate on objects, together with
+  a predicate on morphisms between them that contains all identities
+  and is closed under composition.
+\end{definition}
+
+\begin{definition}[Full subcategory]
+  \label{def:prelims:subcategory-is-full}
+  \uses{def:prelims:subcategory}
+  \lean{Algebra0Lean.Prelims.Subcategory.IsFull}
+  \leanok
+  A subcategory is full if it contains every morphism (of
+  $\categ{C}$) between two of its objects.
+\end{definition}
+
+\begin{exercise}
+  \label{exer:prelims:subcat}
+  \uses{def:prelims:subcategory, def:prelims:subcategory-is-full,
+    def:prelims:type-category}
+  \lean{Algebra0Lean.Prelims.infiniteSubcategory,
+        Algebra0Lean.Prelims.infiniteSubcategory_isFull}
+  Construct a category of infinite sets and explain how it may be
+  viewed as a full subcategory of $\categ{Set}$.
+\end{exercise}
+
+\section{Morphisms}
+\label{sec:prelims:morphisms}
+
+\subsection{Isomorphisms}
+\label{subsec:prelims:isomorphisms}
+
+\begin{definition}[Isomorphism]
+  \label{def:prelims:category-is-iso}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category.IsIso}
+  \leanok
+  A morphism $f \in \Hom_{\categ{C}}(A,B)$ is an isomorphism if it has
+  a two-sided inverse under composition.
+\end{definition}
+
+\begin{proposition}[The inverse of an isomorphism is unique]
+  \label{prop:prelims:iso-unique-inverse}
+  \uses{def:prelims:category-is-iso}
+  \lean{Algebra0Lean.Prelims.Category.isIso_inverse_unique}
+  If $g_1$, $g_2 : B \to A$ both act as inverses of an isomorphism
+  $f : A \to B$, then $g_1 = g_2$.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:iso-of-left-right-inverse}
+  \uses{def:prelims:category-is-iso}
+  \lean{Algebra0Lean.Prelims.Category.isIso_of_hasLeftInverse_hasRightInverse}
+  If $f$ has a left-inverse $g_1$ and a right-inverse $g_2$, then $f$
+  is an isomorphism, $g_1 = g_2$, and this common morphism is the
+  (unique) inverse of $f$.
+\end{proposition}
+
+\begin{definition}[Inverse of an isomorphism]
+  \label{def:prelims:category-iso-inv}
+  \uses{def:prelims:category-is-iso}
+  \lean{Algebra0Lean.Prelims.Category.IsIso.inv}
+  \leanok
+  The inverse $f^{-1}$ of an isomorphism $f$.
+\end{definition}
+
+\begin{proposition}[Iso properties]
+  \label{prop:prelims:iso-props}
+  \uses{def:prelims:category-is-iso, def:prelims:category-iso-inv}
+  \lean{Algebra0Lean.Prelims.Category.isIso_id,
+        Algebra0Lean.Prelims.Category.IsIso.isIso_inv,
+        Algebra0Lean.Prelims.Category.IsIso.isIso_comp,
+        Algebra0Lean.Prelims.Category.inv_id,
+        Algebra0Lean.Prelims.Category.IsIso.inv_inv,
+        Algebra0Lean.Prelims.Category.IsIso.inv_comp}
+  Each identity $1_A$ is an isomorphism and is its own inverse; if
+  $f$ is an isomorphism, then $f^{-1}$ is an isomorphism and
+  ${(f^{-1})}^{-1} = f$; and if $f$, $g$ are isomorphisms, then
+  $g \circ f$ is an isomorphism and
+  ${(g \circ f)}^{-1} = f^{-1} \circ g^{-1}$.
+\end{proposition}
+
+\begin{definition}[Isomorphic objects]
+  \label{def:prelims:obj-iso}
+  \uses{def:prelims:category-is-iso}
+  \lean{Algebra0Lean.Prelims.Category.ObjIso}
+  \leanok
+  Two objects of a category are isomorphic if there is an isomorphism
+  between them.
+\end{definition}
+
+\begin{proposition}[Isomorphism of objects is an equivalence relation]
+  \label{prop:prelims:obj-iso-equiv-rel}
+  \uses{def:prelims:obj-iso, prop:prelims:iso-props}
+  \lean{Algebra0Lean.Prelims.Category.objIso_refl,
+        Algebra0Lean.Prelims.Category.objIso_symm,
+        Algebra0Lean.Prelims.Category.objIso_trans}
+  An immediate corollary of the iso properties above.
+\end{proposition}
+
+\begin{definition}[Groupoid]
+  \label{def:prelims:is-groupoid}
+  \uses{def:prelims:category-is-iso}
+  \lean{Algebra0Lean.Prelims.Category.IsGroupoid}
+  \leanok
+  A category is a groupoid if every morphism is an isomorphism.
+\end{definition}
+
+\begin{definition}[Automorphism]
+  \label{def:prelims:aut}
+  \uses{def:prelims:category-is-iso, def:prelims:category-end}
+  \lean{Algebra0Lean.Prelims.Category.Aut}
+  \leanok
+  An automorphism of $A$: an isomorphism from $A$ to itself. The set
+  of automorphisms $\Aut_{\categ{C}}(A)$, with composition, is a
+  group.
+\end{definition}
+
+\subsection{Monomorphisms and epimorphisms}
+\label{subsec:prelims:morphisms:monomorphisms-and-epimorphisms}
+
+\begin{definition}[Monomorphism]
+  \label{def:prelims:category-is-mono}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category.IsMono}
+  \leanok
+  A morphism $f : A \to B$ is a monomorphism if it is
+  left-cancellable when precomposed with any pair of morphisms into
+  $A$.
+\end{definition}
+
+\begin{definition}[Epimorphism]
+  \label{def:prelims:category-is-epi}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category.IsEpi}
+  \leanok
+  A morphism $f : A \to B$ is an epimorphism if it is
+  right-cancellable when postcomposed with any pair of morphisms out
+  of $B$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:prelims:mono-epi-preorder}
+  \uses{def:prelims:category-is-mono, def:prelims:category-is-epi,
+    def:prelims:preorder-category}
+  \lean{Algebra0Lean.Prelims.isMono_and_isEpi_preorderCategory}
+  In a category induced by a preorder, every morphism is both a
+  monomorphism and an epimorphism.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:iso-iff-bijective-type-category}
+  \uses{def:prelims:category-is-iso, def:prelims:type-category}
+  \lean{Algebra0Lean.Prelims.isIso_iff_bijective_typeCategory}
+  In the category of types, a function is an isomorphism iff it is
+  both injective and surjective, i.e.\ iff it is both a monomorphism
+  and an epimorphism.
+\end{proposition}
+
+\subsection*{Exercises}
+
+\begin{exercise}[Generalized associativity]
+  \label{exer:prelims:assoc-morphism}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category.comp_assoc4}
+  Prove that the result of composing a chain of morphisms is
+  independent of the placement of parentheses.
+\end{exercise}
+
+\begin{exercise}
+  \label{exer:prelims:cat-rel-groupoid}
+  \uses{def:prelims:is-groupoid, def:prelims:preorder-category}
+  \lean{Algebra0Lean.Prelims.isGroupoid_preorderCategory_iff}
+  For what types of relations is the corresponding category a
+  groupoid? (Exactly the symmetric ones, i.e.\ equivalence
+  relations.)
+\end{exercise}
+
+\begin{exercise}
+  \label{exer:prelims:cat-rinv-iff-epi}
+  \uses{def:prelims:category-is-epi}
+  \lean{Algebra0Lean.Prelims.Category.isEpi_of_hasRightInverse,
+        Algebra0Lean.Prelims.exists_isEpi_not_hasRightInverse}
+  Prove that if $f$ has a right-inverse, then $f$ is an epimorphism.
+  Show that the converse does not hold.
+\end{exercise}
+
+\begin{exercise}
+  \label{exer:prelims:subcat-of-monomorph}
+  \uses{def:prelims:category-is-mono, def:prelims:category-is-epi,
+    def:prelims:subcategory}
+  \lean{Algebra0Lean.Prelims.Category.isMono_comp,
+        Algebra0Lean.Prelims.Category.isEpi_comp,
+        Algebra0Lean.Prelims.monoSubcategory,
+        Algebra0Lean.Prelims.epiSubcategory}
+  Prove that the composition of two monomorphisms is a monomorphism
+  (and likewise for epimorphisms). Deduce the subcategories
+  $\categ{C}_{\mathrm{mono}}$, $\categ{C}_{\mathrm{epi}}$.
+\end{exercise}
+
+\section{Universal properties}
+\label{sec:prelims:universal-properties}
+
+\subsection{Initial and final objects}
+\label{subsec:prelims:initial-and-final-objects}
+
+\begin{definition}[Initial and final objects]
+  \label{def:prelims:initial-final}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.Category.IsInitial,
+        Algebra0Lean.Prelims.Category.IsFinal}
+  \leanok
+  $I$ is initial in $\categ{C}$ if for every object $A$ there is
+  exactly one morphism $I \to A$; $F$ is final if for every object
+  $A$ there is exactly one morphism $A \to F$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:prelims:no-initial-final-le-int}
+  \uses{def:prelims:initial-final, def:prelims:le-category}
+  \lean{Algebra0Lean.Prelims.not_exists_isInitial_leCategory_int,
+        Algebra0Lean.Prelims.not_exists_isFinal_leCategory_int}
+  The category from $(\Z,\leq)$ has neither an initial nor a final
+  object.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:final-slice-le-int}
+  \uses{def:prelims:initial-final, def:prelims:slice-category,
+    def:prelims:le-category}
+  \lean{Algebra0Lean.Prelims.exists_isFinal_sliceCategory_leCategory_int}
+  By contrast, the slice category of $(\Z,\leq)$ under $3$ does have
+  a final object, namely $(3,3)$; it still has no initial object.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:initial-final-type-category}
+  \uses{def:prelims:initial-final, def:prelims:type-category}
+  \lean{Algebra0Lean.Prelims.isInitial_typeCategory_iff,
+        Algebra0Lean.Prelims.isFinal_typeCategory_unit}
+  $\emptyset$ is initial in $\categ{Set}$ (and is the unique initial
+  object up to isomorphism); every singleton is final in
+  $\categ{Set}$ (so final objects are not unique).
+\end{proposition}
+
+\begin{proposition}[Initial/final objects are unique up to a unique isomorphism]
+  \label{prop:prelims:initial-final-unique}
+  \uses{def:prelims:initial-final, def:prelims:category-is-iso}
+  \lean{Algebra0Lean.Prelims.Category.isIso_of_isInitial_isInitial,
+        Algebra0Lean.Prelims.Category.isIso_of_isFinal_isFinal}
+  If $I_1$, $I_2$ are both initial in $\categ{C}$, then
+  $I_1 \cong I_2$; likewise for final objects. Further, these
+  isomorphisms are uniquely determined.
+\end{proposition}
+
+\subsection{Quotients}
+\label{subsec:prelims:quotients}
+
+\begin{definition}[Category of maps respecting an equivalence relation]
+  \label{def:prelims:quotient-map-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.quotientMapCategory}
+  \leanok
+  The category of maps out of $A$ respecting an equivalence relation
+  $\sim$: objects are pairs $(Z,\varphi : A \to Z)$ with $\varphi$
+  constant on $\sim$-classes.
+\end{definition}
+
+\begin{proposition}[Quotients satisfy a universal property]
+  \label{prop:prelims:quotient-universal}
+  \uses{def:prelims:quotient-map-category, def:prelims:initial-final}
+  \lean{Algebra0Lean.Prelims.isInitial_quotientMapCategory}
+  Denoting by $\pi$ the canonical projection, the pair
+  $(\pi, A/{\sim})$ is an initial object of this category.
+\end{proposition}
+
+\subsection{Products}
+\label{subsec:prelims:products}
+
+\begin{definition}[Has products]
+  \label{def:prelims:has-products}
+  \uses{def:prelims:two-leg-category, def:prelims:initial-final}
+  \lean{Algebra0Lean.Prelims.Category.HasProducts}
+  \leanok
+  A category has (binary) products if $\categ{C}_{A,B}$ has a final
+  object, for every $A$, $B$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:prelims:has-products-type-category}
+  \uses{def:prelims:has-products, def:prelims:type-category}
+  \lean{Algebra0Lean.Prelims.hasProducts_typeCategory}
+  Products of sets (with their projections) are final objects of
+  $\categ{Set}_{A,B}$: the category of types has products.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:has-products-le-int}
+  \uses{def:prelims:has-products, def:prelims:le-category}
+  \lean{Algebra0Lean.Prelims.hasProducts_leCategory_int}
+  The category from $(\Z,\leq)$ has products: the product of $a$ and
+  $b$ is $\min(a,b)$.
+\end{proposition}
+
+\subsection{Coproducts}
+\label{subsec:prelims:coproducts}
+
+\begin{definition}[Has coproducts]
+  \label{def:prelims:has-coproducts}
+  \uses{def:prelims:two-leg-co-category, def:prelims:initial-final}
+  \lean{Algebra0Lean.Prelims.Category.HasCoproducts}
+  \leanok
+  A category has (binary) coproducts if $\categ{C}^{A,B}$ has an
+  initial object, for every $A$, $B$.
+\end{definition}
+
+\begin{proposition}[The disjoint union is a coproduct]
+  \label{prop:prelims:disjoint-union-coproduct}
+  \uses{def:prelims:has-coproducts, def:prelims:type-category}
+  \lean{Algebra0Lean.Prelims.hasCoproducts_typeCategory}
+  The category of types has coproducts.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:prelims:has-coproducts-le-int}
+  \uses{def:prelims:has-coproducts, def:prelims:le-category}
+  \lean{Algebra0Lean.Prelims.hasCoproducts_leCategory_int}
+  The category from $(\Z,\leq)$ has coproducts: the coproduct of $a$
+  and $b$ is $\max(a,b)$.
+\end{proposition}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  \label{exer:prelims:init-of-final-op}
+  \uses{def:prelims:initial-final, def:prelims:op-category}
+  \lean{Algebra0Lean.Prelims.Category.isInitial_op_of_isFinal}
+  Prove that a final object in $\categ{C}$ is initial in
+  $\categ{C}^{\mathrm{op}}$.
+\end{exercise}
+
+\begin{exercise}
+  \label{exer:prelims:init-final-pntd}
+  \uses{def:prelims:initial-final, def:prelims:pointed-set-category}
+  \lean{Algebra0Lean.Prelims.isInitial_and_isFinal_pointedSetCategory}
+  What are initial and final objects in the category of pointed
+  sets? (The one-point pointed set is both.)
+\end{exercise}
+
+\begin{exercise}
+  \label{exer:prelims:dvbty-cat-Z}
+  \uses{def:prelims:preorder-category, def:prelims:has-products,
+    def:prelims:has-coproducts}
+  \lean{Algebra0Lean.Prelims.divCategory,
+        Algebra0Lean.Prelims.hasProducts_divCategory,
+        Algebra0Lean.Prelims.hasCoproducts_divCategory}
+  Show that the category of positive integers under divisibility has
+  products and coproducts. What are their conventional names? (Gcd
+  and lcm.)
+\end{exercise}
+
+\begin{exercise}
+  \label{exer:prelims:prod-comm}
+  \uses{def:prelims:two-leg-category, def:prelims:obj-iso}
+  \lean{Algebra0Lean.Prelims.objIso_prod_comm}
+  Show that in every category the products $A \times B$ and
+  $B \times A$ are isomorphic, if they exist.
+\end{exercise}
+
+\begin{exercise}
+  \label{exer:prelims:equiv-rel-prod}
+  \lean{Algebra0Lean.Prelims.prodSetoid,
+        Algebra0Lean.Prelims.quotient_prodSetoid_equiv}
+  Conclude that $(A \times B)/{\sim} \cong (A/{\sim_A}) \times
+  (B/{\sim_B})$.
+\end{exercise}
+
+\begin{definition}[Co-fibered category]
+  \label{def:prelims:co-fibered-category}
+  \uses{def:prelims:category}
+  \lean{Algebra0Lean.Prelims.coFiberedCategory}
+  \leanok
+  The mirror of the fibered category: given two
+  morphisms $\alpha : T \to A$, $\beta : T \to B$ with common source,
+  the category $\categ{C}^{\alpha,\beta}$ of commuting pairs
+  $(f : A \to Z, g : B \to Z)$ with $f \alpha = g \beta$.
+\end{definition}
+
+\begin{exercise}[Fibered products and coproducts]
+  \label{exer:prelims:fiber-product}
+  \uses{def:prelims:fibered-category, def:prelims:co-fibered-category,
+    def:prelims:type-category}
+  \lean{Algebra0Lean.Prelims.Category.IsFiberedProduct,
+        Algebra0Lean.Prelims.Category.IsFiberedCoproduct,
+        Algebra0Lean.Prelims.exists_isFiberedProduct_typeCategory,
+        Algebra0Lean.Prelims.exists_isFiberedCoproduct_typeCategory}
+  Define fibered products and coproducts as terminal objects of
+  $\categ{C}_{\alpha,\beta}$, $\categ{C}^{\alpha,\beta}$. As it
+  happens, $\categ{Set}$ has both.
+\end{exercise}
