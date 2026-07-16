@@ -725,4 +725,40 @@ theorem isomorphicGroups_of_isFreeAbelianGroupOn {S F₁ F₂ : Type*} {𝔽₁ 
 
 end FreeGroups
 
+section Subgroups
+
+/-- **Definition.** A subset `H` of `G` is a **subgroup** of `𝔾` if it
+contains the identity and is closed under the operation and under
+taking inverses. -/
+def IsSubgroup {G : Type*} (𝔾 : Group G) (H : Set G) : Prop :=
+  𝔾.e ∈ H ∧ (∀ a ∈ H, ∀ b ∈ H, 𝔾.op a b ∈ H) ∧ ∀ a ∈ H, 𝔾.inv a ∈ H
+
+/-- **Definition.** The **kernel** of a group homomorphism `φ`. -/
+def GroupHom.ker {G H : Type*} (ℍ : Group H) (φ : G → H) : Set G :=
+  {g | φ g = ℍ.e}
+
+/-- **Definition.** The **image** of a group homomorphism `φ`. -/
+def GroupHom.image {G H : Type*} (φ : G → H) : Set H :=
+  Set.range φ
+
+/-- **Proposition.** The kernel of a group homomorphism is a subgroup
+of the domain. -/
+theorem isSubgroup_ker {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) : IsSubgroup 𝔾 (GroupHom.ker ℍ φ) := by
+  sorry
+
+/-- **Proposition.** The image of a group homomorphism is a subgroup
+of the codomain. -/
+theorem isSubgroup_image {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) : IsSubgroup ℍ (GroupHom.image φ) := by
+  sorry
+
+/-- **Proposition.** A group homomorphism is injective if and only if
+its kernel is trivial. -/
+theorem injective_iff_ker_eq_singleton_e {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) : Function.Injective φ ↔ GroupHom.ker ℍ φ = {𝔾.e} := by
+  sorry
+
+end Subgroups
+
 end Algebra0Lean.Groups

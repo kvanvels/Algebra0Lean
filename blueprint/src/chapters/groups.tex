@@ -727,3 +727,65 @@
   If $(F_1, \iota_1)$ and $(F_2, \iota_2)$ are both free abelian
   groups on $S$, then $F_1 \cong F_2$.
 \end{proposition}
+
+\section{Subgroups}
+\label{sec:groups:subgroups}
+
+\subsection{Definition}
+\label{subsec:groups:subgroups-definition}
+
+\begin{definition}
+  \label{def:groups:is-subgroup}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.IsSubgroup}
+  \leanok
+  A subset $H$ of $G$ is a \emph{subgroup} of $G$ if it contains the
+  identity and is closed under the operation and under taking
+  inverses.
+\end{definition}
+
+\subsection{Kernel and image}
+\label{subsec:groups:kernel-and-image}
+
+\begin{definition}
+  \label{def:groups:kernel}
+  \uses{def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.GroupHom.ker}
+  \leanok
+  The \emph{kernel} of a group homomorphism $\varphi : G \to H$ is
+  $\ker\varphi := \{g \in G \mid \varphi(g) = e_H\}$.
+\end{definition}
+
+\begin{definition}
+  \label{def:groups:image}
+  \uses{def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.GroupHom.image}
+  \leanok
+  The \emph{image} of a group homomorphism $\varphi : G \to H$ is
+  $\operatorname{im}\varphi := \{\varphi(g) \mid g \in G\}$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:kernel-is-subgroup}
+  \uses{def:groups:is-subgroup, def:groups:kernel}
+  \lean{Algebra0Lean.Groups.isSubgroup_ker}
+  The kernel of a group homomorphism is a subgroup of the domain.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:groups:image-is-subgroup}
+  \uses{def:groups:is-subgroup, def:groups:image}
+  \lean{Algebra0Lean.Groups.isSubgroup_image}
+  The image of a group homomorphism is a subgroup of the codomain.
+\end{proposition}
+
+\subsection{Monomorphisms}
+\label{subsec:groups:monomorphisms}
+
+\begin{proposition}
+  \label{prop:groups:injective-iff-trivial-kernel}
+  \uses{def:groups:kernel}
+  \lean{Algebra0Lean.Groups.injective_iff_ker_eq_singleton_e}
+  A group homomorphism $\varphi : G \to H$ is injective if and only
+  if $\ker\varphi = \{e_G\}$.
+\end{proposition}
