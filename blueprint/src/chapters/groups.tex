@@ -679,3 +679,28 @@
 \begin{proof}
   \uses{prop:groups:hom-abelian-group}
 \end{proof}
+
+\section{Free groups}
+\label{sec:groups:free-groups}
+
+\subsection{Universal property}
+\label{subsec:groups:free-groups-universal-property}
+
+\begin{definition}
+  \label{def:groups:is-free-group-on}
+  \uses{def:groups:group, def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.IsFreeGroupOn}
+  \leanok
+  A group $F$, together with a function $\iota : S \to F$, is the
+  \emph{free group on $S$} if for every group $H$ and every function
+  $f : S \to H$, there is a unique group homomorphism $\varphi : F
+  \to H$ such that $\varphi \circ \iota = f$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:free-group-unique}
+  \uses{def:groups:is-free-group-on, def:groups:isomorphic-groups}
+  \lean{Algebra0Lean.Groups.isomorphicGroups_of_isFreeGroupOn}
+  If $(F_1, \iota_1)$ and $(F_2, \iota_2)$ are both free groups on
+  $S$, then $F_1 \cong F_2$.
+\end{proposition}

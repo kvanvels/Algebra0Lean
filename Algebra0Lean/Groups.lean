@@ -690,4 +690,23 @@ theorem isCommutative_homGroup {G H : Type*} {𝔾 : Group G} {ℍ : Group H} (h
 
 end GroupHomomorphisms
 
+section FreeGroups
+
+/-- **Definition.** A group `F` together with a function `ι : S → F`
+is the **free group on `S`** if for every group `H` and every
+function `f : S → H`, there is a unique group homomorphism
+`φ : F → H` with `φ ∘ ι = f`. -/
+def IsFreeGroupOn {S F : Type*} (𝔽 : Group F) (ι : S → F) : Prop :=
+  ∀ {H : Type*} (ℍ : Group H) (f : S → H), ∃! φ : F → H, IsGroupHom 𝔽 ℍ φ ∧ φ ∘ ι = f
+
+/-- **Proposition.** The free group on `S`, if it exists, is unique
+up to isomorphism: if `(F₁, ι₁)` and `(F₂, ι₂)` are both free on `S`,
+then `F₁ ≅ F₂`. -/
+theorem isomorphicGroups_of_isFreeGroupOn {S F₁ F₂ : Type*} {𝔽₁ : Group F₁} {𝔽₂ : Group F₂}
+    {ι₁ : S → F₁} {ι₂ : S → F₂} (h₁ : IsFreeGroupOn 𝔽₁ ι₁) (h₂ : IsFreeGroupOn 𝔽₂ ι₂) :
+    IsomorphicGroups 𝔽₁ 𝔽₂ := by
+  sorry
+
+end FreeGroups
+
 end Algebra0Lean.Groups
