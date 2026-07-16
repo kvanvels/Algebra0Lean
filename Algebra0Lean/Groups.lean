@@ -822,6 +822,67 @@ def leftCoset {G : Type*} (𝔾 : Group G) (g : G) (H : Set G) : Set G :=
 def rightCoset {G : Type*} (𝔾 : Group G) (H : Set G) (g : G) : Set G :=
   {h | ∃ a ∈ H, h = 𝔾.op a g}
 
+/-- **Definition.** The equivalence relation `a ~ b ↔ a⁻¹b ∈ N`
+corresponding to a (normal) subgroup `N`, whose classes are the left
+cosets of `N`. -/
+def cosetRel {G : Type*} (𝔾 : Group G) (N : Set G) (a b : G) : Prop :=
+  𝔾.op (𝔾.inv a) b ∈ N
+
+/-- **Proposition.** `cosetRel` is an equivalence relation, for `N` a
+normal subgroup. -/
+theorem equivalence_cosetRel {G : Type*} {𝔾 : Group G} {N : Set G} (hN : IsNormalSubgroup 𝔾 N) :
+    Equivalence (cosetRel 𝔾 N) := by
+  sorry
+
+/-- The `Setoid` on `G` given by `cosetRel`, for `N` a normal
+subgroup. -/
+def cosetSetoid {G : Type*} (𝔾 : Group G) {N : Set G} (hN : IsNormalSubgroup 𝔾 N) : Setoid G where
+  r := cosetRel 𝔾 N
+  iseqv := equivalence_cosetRel hN
+
+/-- **Definition** (Quotient group of `G` modulo `N`). The group
+`G/N`, for `N` a normal subgroup of `G`, with operation
+`[a] • [b] := [a * b]`. -/
+def quotientGroup {G : Type*} (𝔾 : Group G) {N : Set G} (hN : IsNormalSubgroup 𝔾 N) :
+    Group (Quotient (cosetSetoid 𝔾 hN)) where
+  op := by
+    apply Quotient.lift₂ (fun a b => (Quotient.mk (cosetSetoid 𝔾 hN) (𝔾.op a b)))
+    sorry
+  assoc := by sorry
+  e := Quotient.mk (cosetSetoid 𝔾 hN) 𝔾.e
+  identity := by sorry
+  inv := by
+    apply Quotient.lift (fun a => (Quotient.mk (cosetSetoid 𝔾 hN) (𝔾.inv a)))
+    sorry
+  inverse := by sorry
+
+/-- **Definition.** The quotient map `π : G → G/N`. -/
+def quotientMap {G : Type*} (𝔾 : Group G) {N : Set G} (hN : IsNormalSubgroup 𝔾 N) :
+    G → Quotient (cosetSetoid 𝔾 hN) :=
+  Quotient.mk (cosetSetoid 𝔾 hN)
+
+/-- **Proposition.** The quotient map is a group homomorphism. -/
+theorem isGroupHom_quotientMap {G : Type*} (𝔾 : Group G) {N : Set G} (hN : IsNormalSubgroup 𝔾 N) :
+    IsGroupHom 𝔾 (quotientGroup 𝔾 hN) (quotientMap 𝔾 hN) := by
+  sorry
+
+/-- **Theorem** (Universal property of the quotient). Let `N` be a
+normal subgroup of `G`. Then for every group homomorphism
+`φ : G → G'` with `N ⊆ ker φ`, there is a unique group homomorphism
+`ψ : G/N → G'` with `ψ ∘ π = φ`. -/
+theorem exists_unique_quotient_universal_property {G H : Type*} (𝔾 : Group G) {N : Set G}
+    (hN : IsNormalSubgroup 𝔾 N) (ℍ : Group H) (φ : G → H) (hφ : IsGroupHom 𝔾 ℍ φ)
+    (hker : N ⊆ GroupHom.ker ℍ φ) :
+    ∃! ψ : Quotient (cosetSetoid 𝔾 hN) → H,
+      IsGroupHom (quotientGroup 𝔾 hN) ℍ ψ ∧ ψ ∘ quotientMap 𝔾 hN = φ := by
+  sorry
+
+/-- **Proposition** (kernel ⟺ normal). The kernel of the quotient map
+`π : G → G/N` is `N` itself. -/
+theorem ker_quotientMap {G : Type*} (𝔾 : Group G) {N : Set G} (hN : IsNormalSubgroup 𝔾 N) :
+    GroupHom.ker (quotientGroup 𝔾 hN) (quotientMap 𝔾 hN) = N := by
+  sorry
+
 end QuotientGroups
 
 end Algebra0Lean.Groups

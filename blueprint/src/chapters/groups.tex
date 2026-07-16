@@ -882,3 +882,62 @@
   $aH$, for $a \in G$. The \emph{right-cosets} of $H$ are the sets
   $Ha$, $a \in G$.
 \end{definition}
+
+\subsection{Quotient by normal subgroups}
+\label{subsec:groups:quotient-by-normal-subgroups}
+
+\begin{definition}
+  \label{def:groups:coset-rel}
+  \uses{def:groups:normal-subgroup}
+  \lean{Algebra0Lean.Groups.cosetRel}
+  \leanok
+  The equivalence relation $a \sim b \iff a^{-1}b \in N$ corresponding
+  to a (normal) subgroup $N$, whose classes are the left cosets of
+  $N$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:equivalence-coset-rel}
+  \uses{def:groups:coset-rel}
+  \lean{Algebra0Lean.Groups.equivalence_cosetRel}
+  For $N$ a normal subgroup, $\sim$ is an equivalence relation.
+\end{proposition}
+
+\begin{definition}
+  \label{def:groups:quotient-group-modulo-n}
+  \uses{def:groups:normal-subgroup, def:groups:coset-rel,
+    prop:groups:equivalence-coset-rel}
+  \lean{Algebra0Lean.Groups.quotientGroup, Algebra0Lean.Groups.quotientMap}
+  \leanok
+  Let $N$ be a normal subgroup of $G$. The \emph{quotient group of $G$
+  modulo $N$}, denoted $G/N$, is the group of equivalence classes of
+  $\sim$, with $[a] \bullet [b] := [ab]$. The \emph{quotient map}
+  $\pi : G \to G/N$ sends $g$ to $[g]$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:isGroupHom-quotientMap}
+  \uses{def:groups:quotient-group-modulo-n, def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.isGroupHom_quotientMap}
+  The quotient map $\pi : G \to G/N$ is a group homomorphism.
+\end{proposition}
+
+\begin{theorem}
+  \label{thm:groups:quotient-universal-property}
+  \uses{def:groups:quotient-group-modulo-n, def:groups:kernel}
+  \lean{Algebra0Lean.Groups.exists_unique_quotient_universal_property}
+  Let $N$ be a normal subgroup of $G$. Then for every group
+  homomorphism $\varphi : G \to G'$ such that $N \subseteq
+  \ker\varphi$, there exists a unique group homomorphism $\bar\varphi
+  : G/N \to G'$ such that $\bar\varphi \circ \pi = \varphi$.
+\end{theorem}
+
+\subsection{\texorpdfstring{kernel $\Leftrightarrow$ normal}{kernel iff normal}}
+\label{subsec:groups:kernel-iff-normal}
+
+\begin{proposition}
+  \label{prop:groups:ker-quotientMap}
+  \uses{def:groups:quotient-group-modulo-n, def:groups:kernel}
+  \lean{Algebra0Lean.Groups.ker_quotientMap}
+  The kernel of the quotient map $\pi : G \to G/N$ is $N$ itself.
+\end{proposition}
