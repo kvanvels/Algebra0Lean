@@ -422,3 +422,50 @@
 \begin{proof}
   \uses{prop:groups:order-class}
 \end{proof}
+
+\begin{lemma}
+  \label{lem:groups:multiplication-well-defined}
+  \uses{def:groups:cong-mod}
+  \lean{Algebra0Lean.Groups.congMod_mul}
+  If $a \equiv a' \pmod{n}$ and $b \equiv b' \pmod{n}$, then
+  $ab \equiv a'b' \pmod{n}$: multiplication $[a]_n \cdot [b]_n := [ab]_n$
+  is well-defined on $\Z/n\Z$.
+\end{lemma}
+
+\begin{lemma}
+  \label{lem:groups:coprime-class-well-defined}
+  \uses{def:groups:cong-mod}
+  \lean{Algebra0Lean.Groups.gcd_eq_one_congMod}
+  Coprimality with $n$ only depends on the congruence class mod $n$:
+  if $m \equiv m' \pmod n$, then $\gcd(m,n) = 1 \iff \gcd(m',n) = 1$.
+\end{lemma}
+
+\begin{definition}[Multiplication on $\Z/n\Z$]
+  \label{def:groups:zmod-mul}
+  \uses{def:groups:zmod-group, lem:groups:multiplication-well-defined}
+  \lean{Algebra0Lean.Groups.zmodMul}
+  Multiplication of congruence classes mod $n$:
+  $[a]_n \cdot [b]_n := [ab]_n$.
+\end{definition}
+
+\begin{definition}[$(\Z/n\Z)^*$]
+  \label{def:groups:zmod-units}
+  \uses{def:groups:zmod-group, lem:groups:coprime-class-well-defined}
+  \lean{Algebra0Lean.Groups.isUnitClass, Algebra0Lean.Groups.zmodUnits}
+  For any positive $n$, denote by $(\Z/n\Z)^*$ the subset of $\Z/n\Z$
+  consisting of classes $[m]_n$ such that $\gcd(m,n)=1$:
+  \[
+    (\Z/n\Z)^* := \{[m]_n \in \Z/n\Z \mid \gcd(m,n)=1\}.
+  \]
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:units-group}
+  \uses{def:groups:zmod-mul, def:groups:zmod-units,
+    coro:groups:generator-coprime}
+  \lean{Algebra0Lean.Groups.isUnitClass_mul, Algebra0Lean.Groups.zmodUnitsGroup}
+  Multiplication makes $(\Z/n\Z)^*$ into a group.
+\end{proposition}
+\begin{proof}
+  \uses{coro:groups:generator-coprime}
+\end{proof}

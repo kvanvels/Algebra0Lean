@@ -476,6 +476,52 @@ theorem generates_iff_coprime {n : ℕ} (hn : 0 < n) (m : ℤ) :
     Generates (zmodGroup n) (Quotient.mk (zmodSetoid n) m) ↔ Int.gcd m (n : ℤ) = 1 := by
   sorry
 
+/-- Congruence mod `n` is compatible with multiplication: if `a ≡ a'`
+and `b ≡ b'` (mod `n`), then `a * b ≡ a' * b'` (mod `n`). This is what
+makes `[a] * [b] := [a * b]` well-defined on `ℤ/nℤ`. -/
+theorem congMod_mul {n : ℕ} {a a' b b' : ℤ}
+    (ha : congMod n a a') (hb : congMod n b b') :
+    congMod n (a * b) (a' * b') := by
+  sorry
+
+/-- Coprimality with `n` only depends on the congruence class mod `n`:
+if `m ≡ m'` (mod `n`), then `gcd(m, n) = 1 ↔ gcd(m', n) = 1`. This is
+what makes `(ℤ/nℤ)^*` a well-defined subset of `ℤ/nℤ`. -/
+theorem gcd_eq_one_congMod {n : ℕ} {m m' : ℤ} (h : congMod n m m') :
+    Int.gcd m (n : ℤ) = 1 ↔ Int.gcd m' (n : ℤ) = 1 := by
+  sorry
+
+/-- Multiplication of congruence classes mod `n`: `[a]ₙ * [b]ₙ := [a*b]ₙ`. -/
+def zmodMul (n : ℕ) :
+    Quotient (zmodSetoid n) → Quotient (zmodSetoid n) → Quotient (zmodSetoid n) :=
+  Quotient.lift₂ (fun a b => Quotient.mk (zmodSetoid n) (a * b))
+    (fun _ _ _ _ ha hb => Quotient.sound (congMod_mul ha hb))
+
+/-- A class `[m]ₙ` is a **unit** if `m` is coprime to `n`. -/
+def isUnitClass (n : ℕ) : Quotient (zmodSetoid n) → Prop :=
+  Quotient.lift (fun m => Int.gcd m (n : ℤ) = 1)
+    (fun _ _ h => propext (gcd_eq_one_congMod h))
+
+/-- **The group of units `(ℤ/nℤ)^*`** (as a type): classes `[m]ₙ` with
+`gcd(m, n) = 1`. -/
+def zmodUnits (n : ℕ) : Type := {x : Quotient (zmodSetoid n) // isUnitClass n x}
+
+/-- `(ℤ/nℤ)^*` is closed under multiplication: the product of two
+classes coprime to `n` is again coprime to `n`. -/
+theorem isUnitClass_mul {n : ℕ} {x y : Quotient (zmodSetoid n)}
+    (hx : isUnitClass n x) (hy : isUnitClass n y) :
+    isUnitClass n (zmodMul n x y) := by
+  sorry
+
+/-- **Proposition.** Multiplication makes `(ℤ/nℤ)^*` into a group. -/
+def zmodUnitsGroup (n : ℕ) : Group (zmodUnits n) where
+  op x y := ⟨zmodMul n x.1 y.1, isUnitClass_mul x.2 y.2⟩
+  assoc := by sorry
+  e := ⟨Quotient.mk (zmodSetoid n) 1, by sorry⟩
+  identity := by sorry
+  inv := by sorry
+  inverse := by sorry
+
 end CyclicGroupsAndModularArithmetic
 
 end Algebra0Lean.Groups
