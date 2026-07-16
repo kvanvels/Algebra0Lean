@@ -941,3 +941,77 @@
   \lean{Algebra0Lean.Groups.ker_quotientMap}
   The kernel of the quotient map $\pi : G \to G/N$ is $N$ itself.
 \end{proposition}
+
+\section{Canonical decomposition and Lagrange's theorem}
+\label{sec:groups:canonical-decomposition-and-lagrange-s-theorem}
+
+\subsection{Canonical decomposition}
+\label{subsec:groups:canonical-decomposition}
+
+\begin{theorem}
+  \label{thm:groups:canonical-decomposition}
+  \uses{def:groups:quotient-group-modulo-n, def:groups:kernel,
+    def:groups:image, def:groups:subgroup-to-group,
+    def:groups:isomorphic-groups}
+  \lean{Algebra0Lean.Groups.isomorphicGroups_quotient_ker_image}
+  Every group homomorphism $\varphi : G \to G'$ factors as $G
+  \twoheadrightarrow G/\ker\varphi \xrightarrow{\sim}
+  \operatorname{im}\varphi \hookrightarrow G'$, where the middle map
+  is an isomorphism.
+\end{theorem}
+\begin{proof}
+  \uses{thm:groups:quotient-universal-property,
+    prop:groups:iso-iff-bijection}
+\end{proof}
+
+\begin{corollary}
+  \label{coro:groups:first-isomorphism-theorem}
+  \uses{thm:groups:canonical-decomposition}
+  \lean{Algebra0Lean.Groups.isomorphicGroups_of_surjective_groupHom}
+  If $\varphi : G \to G'$ is a surjective group homomorphism, then
+  $G' \cong G/\ker\varphi$.
+\end{corollary}
+
+\begin{proposition}
+  \label{prop:groups:quotient-of-product}
+  \uses{def:groups:normal-subgroup, def:groups:quotient-group-modulo-n,
+    def:groups:prod-group}
+  \lean{Algebra0Lean.Groups.isNormalSubgroup_prod,
+    Algebra0Lean.Groups.isomorphicGroups_quotient_prod}
+  If $H_1 \subseteq G_1$ and $H_2 \subseteq G_2$ are normal subgroups,
+  then $H_1 \times H_2$ is a normal subgroup of $G_1 \times G_2$ and
+  $(G_1 \times G_2)/(H_1 \times H_2) \cong (G_1/H_1) \times
+  (G_2/H_2)$.
+\end{proposition}
+\begin{proof}
+  \uses{coro:groups:first-isomorphism-theorem}
+\end{proof}
+
+\subsection{The index and Lagrange's theorem}
+\label{subsec:groups:the-index-and-lagrange-s-theorem}
+
+\begin{definition}
+  \label{def:groups:index}
+  \uses{def:groups:cosets}
+  \lean{Algebra0Lean.Groups.index}
+  \leanok
+  The \emph{index} of $H$ in $G$, denoted $[G:H]$, is the number of
+  left-cosets of $H$ in $G$ (zero if this is infinite).
+\end{definition}
+
+\begin{lemma}
+  \label{lem:groups:coset-bijections}
+  \uses{def:groups:cosets}
+  \lean{Algebra0Lean.Groups.bijective_leftCoset_of_mem}
+  Let $H$ be a subgroup of a group $G$. Then for every $g \in G$, the
+  function $H \to gH$, $h \mapsto gh$, is a bijection.
+\end{lemma}
+
+\begin{corollary}[Lagrange's theorem]
+  \label{coro:groups:lagrange}
+  \uses{def:groups:index, lem:groups:coset-bijections}
+  \lean{Algebra0Lean.Groups.card_eq_index_mul_card_subgroup}
+  If $G$ is a finite group and $H \subseteq G$ is a subgroup, then
+  $|G| = [G:H] \cdot |H|$. In particular, $|H|$ is a divisor of
+  $|G|$.
+\end{corollary}

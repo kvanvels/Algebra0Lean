@@ -886,4 +886,56 @@ theorem ker_quotientMap {G : Type*} (𝔾 : Group G) {N : Set G} (hN : IsNormalS
 
 end QuotientGroups
 
+section CanonicalDecompositionAndLagrange
+
+/-- **Theorem** (Canonical decomposition). Every group homomorphism
+`φ : G → H` factors as `G ↠ G/ker φ ≅ image φ ↪ H`, where the middle
+map is an isomorphism. -/
+theorem isomorphicGroups_quotient_ker_image {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) :
+    IsomorphicGroups (quotientGroup 𝔾 (isNormalSubgroup_ker hφ)) (isSubgroup_image hφ).toGroup := by
+  sorry
+
+/-- **Corollary** (First isomorphism theorem). If `φ : G → H` is a
+surjective group homomorphism, then `H ≅ G/ker φ`. -/
+theorem isomorphicGroups_of_surjective_groupHom {G H : Type*} {𝔾 : Group G} {ℍ : Group H}
+    {φ : G → H} (hφ : IsGroupHom 𝔾 ℍ φ) (hsurj : Function.Surjective φ) :
+    IsomorphicGroups ℍ (quotientGroup 𝔾 (isNormalSubgroup_ker hφ)) := by
+  sorry
+
+/-- **Proposition.** If `H₁`, `H₂` are normal subgroups of `G₁`,
+`G₂`, then `H₁ × H₂` is a normal subgroup of `G₁ × G₂` and
+`(G₁ × G₂)/(H₁ × H₂) ≅ (G₁/H₁) × (G₂/H₂)`. -/
+theorem isNormalSubgroup_prod {G1 G2 : Type*} (𝔾1 : Group G1) (𝔾2 : Group G2) {H1 : Set G1}
+    {H2 : Set G2} (hH1 : IsNormalSubgroup 𝔾1 H1) (hH2 : IsNormalSubgroup 𝔾2 H2) :
+    IsNormalSubgroup (prodGroup 𝔾1 𝔾2) {p : G1 × G2 | p.1 ∈ H1 ∧ p.2 ∈ H2} := by
+  sorry
+
+theorem isomorphicGroups_quotient_prod {G1 G2 : Type*} {𝔾1 : Group G1} {𝔾2 : Group G2}
+    {H1 : Set G1} {H2 : Set G2} (hH1 : IsNormalSubgroup 𝔾1 H1) (hH2 : IsNormalSubgroup 𝔾2 H2) :
+    IsomorphicGroups (quotientGroup (prodGroup 𝔾1 𝔾2) (isNormalSubgroup_prod 𝔾1 𝔾2 hH1 hH2))
+      (prodGroup (quotientGroup 𝔾1 hH1) (quotientGroup 𝔾2 hH2)) := by
+  sorry
+
+/-- **Definition.** The **index** `[G : H]` of a subgroup `H` in `G`:
+the cardinality of the set of left cosets of `H` (`0` if infinite,
+matching the convention used for `order`). -/
+noncomputable def index {G : Type*} (𝔾 : Group G) (H : Set G) : ℕ :=
+  Nat.card {S : Set G // ∃ g : G, S = leftCoset 𝔾 g H}
+
+/-- **Lemma.** For any `g ∈ G`, the maps `H → gH` and `H → Hg`,
+`h ↦ gh` and `h ↦ hg`, are bijections. -/
+theorem bijective_leftCoset_of_mem {G : Type*} (𝔾 : Group G) (H : Set G) (g : G) :
+    Function.Bijective (fun h : H => (⟨𝔾.op g h.1, ⟨h.1, h.2, rfl⟩⟩ : leftCoset 𝔾 g H)) := by
+  sorry
+
+/-- **Corollary** (Lagrange's theorem). If `G` is finite and `H` is a
+subgroup of `G`, then `|G| = [G : H] * |H|`; in particular, `|H|`
+divides `|G|`. -/
+theorem card_eq_index_mul_card_subgroup {G : Type*} [Fintype G] (𝔾 : Group G) (H : Set G) :
+    Fintype.card G = index 𝔾 H * Nat.card H := by
+  sorry
+
+end CanonicalDecompositionAndLagrange
+
 end Algebra0Lean.Groups
