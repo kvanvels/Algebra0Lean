@@ -7,7 +7,8 @@ import Mathlib.SetTheory.Cardinal.Finite
 # Chapter II: Groups, first encounter
 
 Selected results from Aluffi, *Algebra: Chapter 0*, §II.1 (Definition
-of group), §II.2 (Examples of groups), and §II.3 (The category Grp).
+of group), §II.2 (Examples of groups), §II.3 (The category Grp), and
+§II.4 (Group homomorphisms).
 
 This chapter defines its own `Group` structure from scratch, mirroring
 the book's definition, rather than using Mathlib's `Group` typeclass —
