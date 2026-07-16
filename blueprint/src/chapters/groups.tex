@@ -648,3 +648,34 @@
   If $\varphi : G \to H$ is an isomorphism, then $G$ is commutative if
   and only if $H$ is commutative.
 \end{proposition}
+
+\subsection{Homomorphisms of abelian groups}
+\label{subsec:groups:homomorphisms-of-abelian-groups}
+
+\begin{definition}
+  \label{def:groups:group-hom-type}
+  \uses{def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.GroupHom}
+  \leanok
+  For groups $G$, $H$, we write $\Hom(G, H)$ for the type of group
+  homomorphisms $G \to H$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:hom-abelian-group}
+  \uses{def:groups:group-hom-type, def:groups:is-commutative}
+  \lean{Algebra0Lean.Groups.homGroup}
+  If $A$ is an abelian group, then $\Hom(G, A)$, with the operation
+  $(\varphi + \psi)(g) := \varphi(g) \psi(g)$ defined pointwise, is
+  itself an abelian group.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:groups:hom-abelian-group-commutative}
+  \uses{prop:groups:hom-abelian-group}
+  \lean{Algebra0Lean.Groups.isCommutative_homGroup}
+  The group $\Hom(G, A)$ of the previous proposition is commutative.
+\end{proposition}
+\begin{proof}
+  \uses{prop:groups:hom-abelian-group}
+\end{proof}

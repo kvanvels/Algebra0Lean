@@ -669,6 +669,25 @@ theorem isCommutative_iff_of_groupIso {G H : Type*} {𝔾 : Group G} {ℍ : Grou
     IsCommutative 𝔾 ↔ IsCommutative ℍ := by
   sorry
 
+/-- **Definition.** The type of group homomorphisms `G → H`. -/
+def GroupHom {G H : Type*} (𝔾 : Group G) (ℍ : Group H) : Type _ :=
+  {φ : G → H // IsGroupHom 𝔾 ℍ φ}
+
+/-- **Proposition.** If `A` is an abelian group, then `Hom(G, A)`,
+with pointwise operation, is itself an abelian group. -/
+def homGroup {G H : Type*} (𝔾 : Group G) {ℍ : Group H} (hH : IsCommutative ℍ) :
+    Group (GroupHom 𝔾 ℍ) where
+  op f g := ⟨fun x => ℍ.op (f.1 x) (g.1 x), by sorry⟩
+  assoc := by sorry
+  e := ⟨fun _ => ℍ.e, by sorry⟩
+  identity := by sorry
+  inv f := ⟨fun x => ℍ.inv (f.1 x), by sorry⟩
+  inverse := by sorry
+
+theorem isCommutative_homGroup {G H : Type*} {𝔾 : Group G} {ℍ : Group H} (hH : IsCommutative ℍ) :
+    IsCommutative (homGroup 𝔾 hH) := by
+  sorry
+
 end GroupHomomorphisms
 
 end Algebra0Lean.Groups
