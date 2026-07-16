@@ -599,3 +599,52 @@
   Let $\varphi : G \to H$ be a group homomorphism. Then $\varphi$ is
   an isomorphism of groups if and only if it is a bijection.
 \end{proposition}
+
+\begin{definition}
+  \label{def:groups:isomorphic-groups}
+  \uses{def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.IsomorphicGroups}
+  \leanok
+  Two groups $G$, $H$ are \emph{isomorphic} if there is a bijective
+  group homomorphism $G \to H$.
+\end{definition}
+
+\subsection{Cyclic groups}
+\label{subsec:groups:cyclic-groups-revisited}
+
+\begin{definition}
+  \label{def:groups:int-group}
+  \lean{Algebra0Lean.Groups.intGroup}
+  \leanok
+  The set $\Z$ of integers, with operation given by addition, is a
+  group.
+\end{definition}
+
+\begin{definition}
+  \label{def:groups:is-cyclic-group}
+  \uses{def:groups:isomorphic-groups, def:groups:int-group,
+    def:groups:zmod-group}
+  \lean{Algebra0Lean.Groups.IsCyclicGroup}
+  \leanok
+  A group $G$ is \emph{cyclic} if it is isomorphic to $\Z$ or to
+  $\Z/n\Z$ for some $n$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:iso-preserves-order}
+  \uses{def:groups:isomorphic-groups, def:groups:order-element}
+  \lean{Algebra0Lean.Groups.order_eq_of_groupIso}
+  If $\varphi : G \to H$ is an isomorphism, then for every $g \in G$,
+  $|\varphi(g)| = |g|$.
+\end{proposition}
+\begin{proof}
+  \uses{prop:groups:hom-order-divides}
+\end{proof}
+
+\begin{proposition}
+  \label{prop:groups:iso-preserves-commutativity}
+  \uses{def:groups:isomorphic-groups, def:groups:is-commutative}
+  \lean{Algebra0Lean.Groups.isCommutative_iff_of_groupIso}
+  If $\varphi : G \to H$ is an isomorphism, then $G$ is commutative if
+  and only if $H$ is commutative.
+\end{proposition}

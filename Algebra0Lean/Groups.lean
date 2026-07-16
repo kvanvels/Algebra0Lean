@@ -635,6 +635,39 @@ theorem groupCategory_isIso_iff_bijective {G H : Type u} {𝔾 : Group G} {ℍ :
       ↔ Function.Bijective φ := by
   sorry
 
+/-- **Definition.** Two groups `G`, `H` are **isomorphic** if there is
+a bijective group homomorphism `G → H`. -/
+def IsomorphicGroups {G H : Type*} (𝔾 : Group G) (ℍ : Group H) : Prop :=
+  ∃ φ : G → H, IsGroupHom 𝔾 ℍ φ ∧ Function.Bijective φ
+
+/-- **The additive group of integers.** -/
+def intGroup : Group ℤ where
+  op := (· + ·)
+  assoc := by sorry
+  e := 0
+  identity := by sorry
+  inv := Neg.neg
+  inverse := by sorry
+
+/-- **Definition.** A group `G` is **cyclic** if it is isomorphic to
+`ℤ` or to `ℤ/nℤ` for some `n`. -/
+def IsCyclicGroup {G : Type*} (𝔾 : Group G) : Prop :=
+  IsomorphicGroups 𝔾 intGroup ∨ ∃ n : ℕ, IsomorphicGroups 𝔾 (zmodGroup n)
+
+/-- **Proposition** (first part). An isomorphism preserves order:
+`∀ g ∈ G, |φ(g)| = |g|`. -/
+theorem order_eq_of_groupIso {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) (hbij : Function.Bijective φ) (g : G) :
+    order ℍ (φ g) = order 𝔾 g := by
+  sorry
+
+/-- **Proposition** (second part). An isomorphism preserves
+commutativity: `G` is commutative if and only if `H` is. -/
+theorem isCommutative_iff_of_groupIso {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) (hbij : Function.Bijective φ) :
+    IsCommutative 𝔾 ↔ IsCommutative ℍ := by
+  sorry
+
 end GroupHomomorphisms
 
 end Algebra0Lean.Groups
