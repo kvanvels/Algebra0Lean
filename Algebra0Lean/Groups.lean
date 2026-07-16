@@ -142,12 +142,16 @@ theorem gpow_add (g : G) (a b : ℕ) :
       show gpow 𝔾 g (a + b) ⋆ g = gpow 𝔾 g a ⋆ (gpow 𝔾 g b ⋆ g)
       rw [ih, 𝔾.assoc]
 
+theorem gzpow_zero (g : G) :
+  gzpow 𝔾 g 0 = 𝔾.e := by sorry
+
 /-- Powers add for integer exponents too: `g^(a+b) = g^a ⋆ g^b` for
 `a b : ℤ` (the book's stated form of the law, right after introducing
 powers). -/
 theorem gzpow_add (g : G) (a b : ℤ) :
     gzpow 𝔾 g (a + b) = gzpow 𝔾 g a ⋆ gzpow 𝔾 g b := by
   sorry
+    
 
 /-- Powers multiply: `g^(ab) = (g^a)^b`. -/
 theorem gpow_mul (g : G) (a b : ℕ) :
@@ -222,7 +226,8 @@ theorem order_pos (g : G) (hf : HasFiniteOrder 𝔾 g) :
   classical
   unfold order
   rw [dif_pos hf]
-  exact (Nat.find_spec hf).1
+  have h1 := Nat.find_spec hf
+  exact h1.1
 
 /-- `g^|g| = e` for an element of finite order. -/
 theorem gpow_order (g : G) (hf : HasFiniteOrder 𝔾 g) :
@@ -390,9 +395,18 @@ elements are the bijections `A → A`, with composition as the group
 law. -/
 noncomputable def symmetricGroup (A : Type*) : Group (Category.Aut typeCategory A) where
   op f g := ⟨typeCategory.comp g.1 f.1, f.2.isIso_comp g.2⟩
-  assoc := by sorry
+  assoc := by
+    intro A B C
+    sorry
+
+  
   e := ⟨typeCategory.id A, typeCategory.isIso_id A⟩
-  identity := by sorry
+  identity := by
+    intro A
+    sorry
+    
+    
+    
   inv f := ⟨f.2.inv, f.2.isIso_inv⟩
   inverse := by sorry
 
@@ -572,38 +586,72 @@ def groupCategory.{w} : Category.{w + 1, w} where
 one-element type. -/
 def trivialGroup : Group PUnit where
   op _ _ := PUnit.unit
-  assoc _ _ _ := by sorry
+  assoc _ _ _ := rfl
   e := PUnit.unit
-  identity _ := by sorry
+  identity x := And.intro (PUnit.ext PUnit.unit x) (PUnit.ext PUnit.unit x)  
   inv _ := PUnit.unit
-  inverse _ := by sorry
+  inverse x := And.intro (PUnit.ext PUnit.unit x) (PUnit.ext PUnit.unit x)
+    
+    
 
 /-- **Proposition.** Trivial groups are both initial and final in
 `Grp` (a "zero object"). -/
 theorem isInitial_and_isFinal_trivialGroup :
     groupCategory.IsInitial (⟨PUnit, trivialGroup⟩ : groupCategory.Obj) ∧
       groupCategory.IsFinal (⟨PUnit, trivialGroup⟩ : groupCategory.Obj) := by
-  sorry
+   apply And.intro
+   intro y
+   sorry
+   intro y
+   sorry
+   
+   
+   
+
 
 /-- **Direct product.** The componentwise group structure on `G × H`:
 `(g₁, h₁) ⋆ (g₂, h₂) := (g₁ ⋆ g₂, h₁ ⋆ h₂)`. -/
 def prodGroup {G H : Type*} (𝔾 : Group G) (ℍ : Group H) : Group (G × H) where
   op x y := (𝔾.op x.1 y.1, ℍ.op x.2 y.2)
-  assoc := by sorry
+  assoc := by
+    intro ⟨g0,g1⟩ ⟨h0,h1⟩ ⟨k0,k1⟩
+    rw [𝔾.assoc,ℍ.assoc]    
   e := (𝔾.e, ℍ.e)
-  identity := by sorry
+  identity := by
+    intro ⟨g,h⟩
+    let gid :=(𝔾.identity g)
+    let hid :=(ℍ.identity h)
+    rw [gid.1,gid.2,hid.1,hid.2]
+    exact ⟨rfl,rfl⟩ 
   inv x := (𝔾.inv x.1, ℍ.inv x.2)
-  inverse := by sorry
+  inverse := by
+    intro ⟨g,h⟩
+    have g1 := 𝔾.inverse g
+    have h1 := ℍ.inverse h
+    rw [g1.1,g1.2,h1.1,h1.2]    
+    apply And.intro (rfl) (rfl)
+  
+    
+    
+    
+    
 
 /-- The projection `G × H → G` is a group homomorphism. -/
 theorem isGroupHom_fst {G H : Type*} (𝔾 : Group G) (ℍ : Group H) :
     IsGroupHom (prodGroup 𝔾 ℍ) 𝔾 Prod.fst := by
-  sorry
+  intro ⟨g0,h0⟩ ⟨g1,h1⟩
+  dsimp
+  rfl    
+  
+
 
 /-- The projection `G × H → H` is a group homomorphism. -/
 theorem isGroupHom_snd {G H : Type*} (𝔾 : Group G) (ℍ : Group H) :
     IsGroupHom (prodGroup 𝔾 ℍ) ℍ Prod.snd := by
-  sorry
+  intro ⟨g0,h0⟩ ⟨g1,h1⟩
+  dsimp
+  rfl
+  
 
 universe u
 
