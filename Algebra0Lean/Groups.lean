@@ -707,6 +707,22 @@ theorem isomorphicGroups_of_isFreeGroupOn {S F₁ F₂ : Type*} {𝔽₁ : Group
     IsomorphicGroups 𝔽₁ 𝔽₂ := by
   sorry
 
+/-- **Definition.** An abelian group `F` together with a function
+`ι : S → F` is the **free abelian group on `S`** if for every abelian
+group `H` and every function `f : S → H`, there is a unique group
+homomorphism `φ : F → H` with `φ ∘ ι = f`. -/
+def IsFreeAbelianGroupOn {S F : Type*} (𝔽 : Group F) (_hF : IsCommutative 𝔽) (ι : S → F) : Prop :=
+  ∀ {H : Type*} (ℍ : Group H), IsCommutative ℍ →
+    ∀ f : S → H, ∃! φ : F → H, IsGroupHom 𝔽 ℍ φ ∧ φ ∘ ι = f
+
+/-- **Proposition.** The free abelian group on `S`, if it exists, is
+unique up to isomorphism. -/
+theorem isomorphicGroups_of_isFreeAbelianGroupOn {S F₁ F₂ : Type*} {𝔽₁ : Group F₁}
+    {𝔽₂ : Group F₂} {hF₁ : IsCommutative 𝔽₁} {hF₂ : IsCommutative 𝔽₂} {ι₁ : S → F₁} {ι₂ : S → F₂}
+    (h₁ : IsFreeAbelianGroupOn 𝔽₁ hF₁ ι₁) (h₂ : IsFreeAbelianGroupOn 𝔽₂ hF₂ ι₂) :
+    IsomorphicGroups 𝔽₁ 𝔽₂ := by
+  sorry
+
 end FreeGroups
 
 end Algebra0Lean.Groups
