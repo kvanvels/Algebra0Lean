@@ -7,9 +7,11 @@ import Mathlib.SetTheory.Cardinal.Finite
 # Chapter II: Groups, first encounter
 
 Selected results from Aluffi, *Algebra: Chapter 0*, §II.1 (Definition
-of group), §II.2 (Examples of groups), §II.3 (The category Grp),
-§II.4 (Group homomorphisms), §II.5 (Free groups), §II.6 (Subgroups),
-and §II.7 (Quotient groups).
+of group) through §II.9 (Group actions). A few results are omitted:
+the second/third isomorphism theorems and epimorphisms/cokernels in
+§II.8, and all of §II.10 (Group objects in categories), which would
+need categorical product/pairing-morphism infrastructure not yet
+built in `Prelims.lean`.
 
 This chapter defines its own `Group` structure from scratch, mirroring
 the book's definition, rather than using Mathlib's `Group` typeclass —
