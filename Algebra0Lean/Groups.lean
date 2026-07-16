@@ -780,6 +780,25 @@ theorem generatedSubgroup_subset {G : Type*} (𝔾 : Group G) (S H : Set G) (hH 
     (hSH : S ⊆ H) : generatedSubgroup 𝔾 S ⊆ H := by
   sorry
 
+/-- **Definition.** A subgroup `H` of `𝔾`, with its own group
+structure: the operation, identity, and inverse are those of `𝔾`,
+restricted to `H`. -/
+def IsSubgroup.toGroup {G : Type*} {𝔾 : Group G} {H : Set G} (hH : IsSubgroup 𝔾 H) :
+    Group {x // x ∈ H} where
+  op a b := ⟨𝔾.op a.1 b.1, hH.2.1 a.1 a.2 b.1 b.2⟩
+  assoc := by sorry
+  e := ⟨𝔾.e, hH.1⟩
+  identity := by sorry
+  inv a := ⟨𝔾.inv a.1, hH.2.2 a.1 a.2⟩
+  inverse := by sorry
+
+/-- **Proposition** (Subgroups of cyclic groups). Every subgroup of a
+cyclic group is cyclic. -/
+theorem isCyclicGroup_of_isSubgroup_of_isCyclicGroup {G : Type*} {𝔾 : Group G}
+    (hCyc : IsCyclicGroup 𝔾) {H : Set G} (hH : IsSubgroup 𝔾 H) :
+    IsCyclicGroup hH.toGroup := by
+  sorry
+
 end Subgroups
 
 end Algebra0Lean.Groups

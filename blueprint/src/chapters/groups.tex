@@ -825,3 +825,21 @@
   if $H$ is a subgroup with $S \subseteq H$, then $\langle S \rangle
   \subseteq H$.
 \end{proposition}
+
+\subsection{Subgroups of cyclic groups}
+\label{subsec:groups:subgroups-of-cyclic-groups}
+
+\begin{definition}
+  \label{def:groups:subgroup-to-group}
+  \uses{def:groups:is-subgroup}
+  \lean{Algebra0Lean.Groups.IsSubgroup.toGroup}
+  \leanok
+  A subgroup $H$ of $G$, with the group structure inherited from $G$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:subgroup-of-cyclic-is-cyclic}
+  \uses{def:groups:subgroup-to-group, def:groups:is-cyclic-group}
+  \lean{Algebra0Lean.Groups.isCyclicGroup_of_isSubgroup_of_isCyclicGroup}
+  Every subgroup of a cyclic group is cyclic.
+\end{proposition}
