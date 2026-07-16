@@ -7,7 +7,7 @@ import Mathlib.SetTheory.Cardinal.Finite
 # Chapter II: Groups, first encounter
 
 Selected results from Aluffi, *Algebra: Chapter 0*, §II.1 (Definition
-of group) and §II.2 (Examples of groups).
+of group), §II.2 (Examples of groups), and §II.3 (The category Grp).
 
 This chapter defines its own `Group` structure from scratch, mirroring
 the book's definition, rather than using Mathlib's `Group` typeclass —
@@ -523,5 +523,118 @@ def zmodUnitsGroup (n : ℕ) : Group (zmodUnits n) where
   inverse := by sorry
 
 end CyclicGroupsAndModularArithmetic
+
+section CategoryGrp
+
+/-- A function `φ : G → H` between the underlying sets of two groups
+is a **group homomorphism** if it preserves the group operation:
+`φ(a ⋆ b) = φ(a) ⋆ φ(b)`. -/
+def IsGroupHom {G H : Type*} (𝔾 : Group G) (ℍ : Group H) (φ : G → H) : Prop :=
+  ∀ a b : G, φ (𝔾.op a b) = ℍ.op (φ a) (φ b)
+
+/-- **Proposition.** A group homomorphism preserves the identity:
+`φ(e_G) = e_H`. -/
+theorem IsGroupHom.map_e {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) : φ 𝔾.e = ℍ.e := by
+  sorry
+
+/-- **Proposition** (second part). A group homomorphism preserves
+inverses: `φ(g⁻¹) = φ(g)⁻¹`. -/
+theorem IsGroupHom.map_inv {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) (g : G) : φ (𝔾.inv g) = ℍ.inv (φ g) := by
+  sorry
+
+open Algebra0Lean.Prelims
+
+/-- The composite of two group homomorphisms is a group homomorphism. -/
+theorem IsGroupHom.comp {G H K : Type*} {𝔾 : Group G} {ℍ : Group H} {𝕂 : Group K}
+    {φ : G → H} {ψ : H → K} (hφ : IsGroupHom 𝔾 ℍ φ) (hψ : IsGroupHom ℍ 𝕂 ψ) :
+    IsGroupHom 𝔾 𝕂 (ψ ∘ φ) := by
+  sorry
+
+/-- **Grp: Definition.** The category of groups: objects are groups
+(as a type `G` together with a `Group G` structure), morphisms are
+group homomorphisms. -/
+def groupCategory.{w} : Category.{w + 1, w} where
+  Obj := Σ G : Type w, Group G
+  Hom X Y := {φ : X.1 → Y.1 // IsGroupHom X.2 Y.2 φ}
+  id X := ⟨id, fun _ _ => rfl⟩
+  comp g f := ⟨g.1 ∘ f.1, f.2.comp g.2⟩
+  comp_assoc := by sorry
+  id_comp := by sorry
+  comp_id := by sorry
+
+/-- **The trivial group.** The unique group structure on a
+one-element type. -/
+def trivialGroup : Group PUnit where
+  op _ _ := PUnit.unit
+  assoc _ _ _ := by sorry
+  e := PUnit.unit
+  identity _ := by sorry
+  inv _ := PUnit.unit
+  inverse _ := by sorry
+
+/-- **Proposition.** Trivial groups are both initial and final in
+`Grp` (a "zero object"). -/
+theorem isInitial_and_isFinal_trivialGroup :
+    groupCategory.IsInitial (⟨PUnit, trivialGroup⟩ : groupCategory.Obj) ∧
+      groupCategory.IsFinal (⟨PUnit, trivialGroup⟩ : groupCategory.Obj) := by
+  sorry
+
+/-- **Direct product.** The componentwise group structure on `G × H`:
+`(g₁, h₁) ⋆ (g₂, h₂) := (g₁ ⋆ g₂, h₁ ⋆ h₂)`. -/
+def prodGroup {G H : Type*} (𝔾 : Group G) (ℍ : Group H) : Group (G × H) where
+  op x y := (𝔾.op x.1 y.1, ℍ.op x.2 y.2)
+  assoc := by sorry
+  e := (𝔾.e, ℍ.e)
+  identity := by sorry
+  inv x := (𝔾.inv x.1, ℍ.inv x.2)
+  inverse := by sorry
+
+/-- The projection `G × H → G` is a group homomorphism. -/
+theorem isGroupHom_fst {G H : Type*} (𝔾 : Group G) (ℍ : Group H) :
+    IsGroupHom (prodGroup 𝔾 ℍ) 𝔾 Prod.fst := by
+  sorry
+
+/-- The projection `G × H → H` is a group homomorphism. -/
+theorem isGroupHom_snd {G H : Type*} (𝔾 : Group G) (ℍ : Group H) :
+    IsGroupHom (prodGroup 𝔾 ℍ) ℍ Prod.snd := by
+  sorry
+
+universe u
+
+/-- **Proposition.** With the componentwise operation, `G × H` (with
+its projections) is a product in `Grp`. -/
+theorem isFinal_prodGroup {G H : Type u} (𝔾 : Group G) (ℍ : Group H) :
+    (twoLegCategory groupCategory
+        (⟨G, 𝔾⟩ : groupCategory.Obj) (⟨H, ℍ⟩ : groupCategory.Obj)).IsFinal
+      ⟨⟨G × H, prodGroup 𝔾 ℍ⟩,
+        ⟨Prod.fst, isGroupHom_fst 𝔾 ℍ⟩,
+        ⟨Prod.snd, isGroupHom_snd 𝔾 ℍ⟩⟩ := by
+  sorry
+
+end CategoryGrp
+
+section GroupHomomorphisms
+
+universe u
+
+/-- **Proposition.** Let `φ : G → H` be a group homomorphism, and let
+`g ∈ G` be an element of finite order. Then `|φ(g)|` divides `|g|`. -/
+theorem order_map_dvd {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) {g : G} (hg : HasFiniteOrder 𝔾 g) :
+    order ℍ (φ g) ∣ order 𝔾 g := by
+  sorry
+
+/-- **Proposition.** A group homomorphism `φ : G → H` is an
+isomorphism (in `Grp`) if and only if it is a bijection. -/
+theorem groupCategory_isIso_iff_bijective {G H : Type u} {𝔾 : Group G} {ℍ : Group H}
+    {φ : G → H} (hφ : IsGroupHom 𝔾 ℍ φ) :
+    groupCategory.IsIso
+        (⟨φ, hφ⟩ : groupCategory.Hom (⟨G, 𝔾⟩ : groupCategory.Obj) (⟨H, ℍ⟩ : groupCategory.Obj))
+      ↔ Function.Bijective φ := by
+  sorry
+
+end GroupHomomorphisms
 
 end Algebra0Lean.Groups

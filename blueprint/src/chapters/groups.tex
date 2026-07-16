@@ -414,8 +414,7 @@
 
 \begin{corollary}
   \label{coro:groups:generator-coprime}
-  \uses{def:groups:zmod-group, def:groups:generates,
-    prop:groups:order-class}
+  \uses{def:groups:zmod-group, def:groups:generates}
   \lean{Algebra0Lean.Groups.generates_iff_coprime}
   The class $[m]_n$ generates $\Z/n\Z$ if and only if $\gcd(m,n) = 1$.
 \end{corollary}
@@ -461,11 +460,142 @@
 
 \begin{proposition}
   \label{prop:groups:units-group}
-  \uses{def:groups:zmod-mul, def:groups:zmod-units,
-    coro:groups:generator-coprime}
+  \uses{def:groups:zmod-mul, def:groups:zmod-units}
   \lean{Algebra0Lean.Groups.isUnitClass_mul, Algebra0Lean.Groups.zmodUnitsGroup}
   Multiplication makes $(\Z/n\Z)^*$ into a group.
 \end{proposition}
 \begin{proof}
   \uses{coro:groups:generator-coprime}
 \end{proof}
+
+\section{The category Grp}
+\label{sec:groups:the-category-grp}
+
+\subsection{Group homomorphisms}
+\label{subsec:groups:group-homomorphisms}
+
+\begin{definition}[Group homomorphism]
+  \label{def:groups:homomorphism}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.IsGroupHom}
+  \leanok
+  For groups $(G, m_G)$ and $(H, m_H)$, a set-function
+  $\varphi : G \to H$ is a \textbf{group homomorphism} if
+  $\varphi(a \cdot b) = \varphi(a) \cdot \varphi(b)$ for all
+  $a, b \in G$.
+\end{definition}
+
+\subsection{Pause for reflection}
+\label{subsec:groups:pause-for-reflection}
+
+\begin{proposition}
+  \label{prop:groups:homo-preserves-identity}
+  \uses{def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.IsGroupHom.map_e,
+        Algebra0Lean.Groups.IsGroupHom.map_inv}
+  Let $\varphi : G \to H$ be a group homomorphism. Then
+  $\varphi(e_G) = e_H$, and $\forall g \in G$,
+  $\varphi(g^{-1}) = \varphi(g)^{-1}$.
+\end{proposition}
+
+\subsection{Grp: Definition}
+\label{subsec:groups:grp-definition}
+
+\begin{lemma}
+  \label{lem:groups:homomorphism-comp}
+  \uses{def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.IsGroupHom.comp}
+  The composite of two group homomorphisms is a group homomorphism.
+\end{lemma}
+
+\begin{definition}[$\categ{Grp}$]
+  \label{def:groups:grp-category}
+  \uses{def:groups:group, def:groups:homomorphism,
+    lem:groups:homomorphism-comp, def:prelims:category}
+  \lean{Algebra0Lean.Groups.groupCategory}
+  The category $\categ{Grp}$: objects are groups, morphisms are group
+  homomorphisms, with composition and identities inherited from
+  $\categ{Set}$.
+\end{definition}
+
+\subsection{Products et al.}
+\label{subsec:groups:products-et-al}
+
+\begin{definition}[Trivial group]
+  \label{def:groups:trivial-group}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.trivialGroup}
+  \leanok
+  The unique group structure on a one-element type.
+\end{definition}
+
+\begin{proposition}[Trivial groups are both initial and final in
+  $\categ{Grp}$]
+  \label{prop:groups:trivial-zero-object}
+  \uses{def:groups:grp-category, def:groups:trivial-group,
+    def:prelims:initial-final}
+  \lean{Algebra0Lean.Groups.isInitial_and_isFinal_trivialGroup}
+  This makes trivial groups \emph{zero-objects} of the category
+  $\categ{Grp}$.
+\end{proposition}
+\begin{proof}
+  \uses{prop:groups:homo-preserves-identity}
+\end{proof}
+
+\begin{definition}[Direct product]
+  \label{def:groups:prod-group}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.prodGroup}
+  \leanok
+  The componentwise group structure on $G \times H$:
+  $(g_1,h_1) \cdot (g_2,h_2) := (g_1g_2,\, h_1h_2)$.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:groups:prod-projections-hom}
+  \uses{def:groups:prod-group, def:groups:homomorphism}
+  \lean{Algebra0Lean.Groups.isGroupHom_fst, Algebra0Lean.Groups.isGroupHom_snd}
+  The natural projections $\pi_G, \pi_H$ from $G \times H$ are group
+  homomorphisms.
+\end{lemma}
+
+\begin{proposition}
+  \label{prop:groups:direct-product-universal}
+  \uses{def:groups:prod-group, def:groups:grp-category,
+    def:prelims:two-leg-category}
+  \lean{Algebra0Lean.Groups.isFinal_prodGroup}
+  With operation defined componentwise, $G \times H$ is a product in
+  $\categ{Grp}$.
+\end{proposition}
+\begin{proof}
+  \uses{lem:groups:prod-projections-hom}
+\end{proof}
+
+\section{Group homomorphisms}
+\label{sec:groups:group-homomorphisms}
+
+\subsection{Homomorphisms and order}
+\label{subsec:groups:homomorphisms-and-order}
+
+\begin{proposition}
+  \label{prop:groups:hom-order-divides}
+  \uses{def:groups:homomorphism, def:groups:order-element}
+  \lean{Algebra0Lean.Groups.order_map_dvd}
+  Let $\varphi : G \to H$ be a group homomorphism, and let $g \in G$
+  be an element of finite order. Then $|\varphi(g)|$ divides $|g|$.
+\end{proposition}
+\begin{proof}
+  \uses{lem:groups:order-divisor}
+\end{proof}
+
+\subsection{Isomorphisms}
+\label{subsec:groups:isomorphisms}
+
+\begin{proposition}
+  \label{prop:groups:iso-iff-bijection}
+  \uses{def:groups:homomorphism, def:groups:grp-category,
+    def:prelims:category-is-iso}
+  \lean{Algebra0Lean.Groups.groupCategory_isIso_iff_bijective}
+  Let $\varphi : G \to H$ be a group homomorphism. Then $\varphi$ is
+  an isomorphism of groups if and only if it is a bijection.
+\end{proposition}
