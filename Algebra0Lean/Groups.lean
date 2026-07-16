@@ -938,4 +938,64 @@ theorem card_eq_index_mul_card_subgroup {G : Type*} [Fintype G] (𝔾 : Group G)
 
 end CanonicalDecompositionAndLagrange
 
+section GroupActions
+
+/-- **Definition** (Action on a set). A function `ρ : G → A → A` is
+an **action** of `𝔾` on `A` if `ρ e a = a` for all `a`, and
+`ρ (gh) a = ρ g (ρ h a)` for all `g h a`. -/
+def IsAction {G A : Type*} (𝔾 : Group G) (ρ : G → A → A) : Prop :=
+  (∀ a : A, ρ 𝔾.e a = a) ∧ ∀ g h : G, ∀ a : A, ρ (𝔾.op g h) a = ρ g (ρ h a)
+
+/-- **Definition** (Faithful action). An action is **faithful** if the
+identity is the only element fixing every point of `A`. -/
+def IsFaithfulAction {G A : Type*} (𝔾 : Group G) (ρ : G → A → A) : Prop :=
+  ∀ g : G, (∀ a : A, ρ g a = a) → g = 𝔾.e
+
+/-- **Definition** (Transitive action). An action on a nonempty set
+`A` is **transitive** if every point can be reached from every other
+by some group element. -/
+def IsTransitiveAction {G A : Type*} (_𝔾 : Group G) (ρ : G → A → A) : Prop :=
+  ∀ a b : A, ∃ g : G, b = ρ g a
+
+/-- **Definition.** The **orbit** of `a` under an action `ρ` of `𝔾`. -/
+def orbit {G A : Type*} (_𝔾 : Group G) (ρ : G → A → A) (a : A) : Set A :=
+  {b | ∃ g : G, b = ρ g a}
+
+/-- **Definition.** The **stabilizer** of `a` under an action `ρ` of
+`𝔾`: the elements of `G` fixing `a`. -/
+def stabilizer {G A : Type*} (_𝔾 : Group G) (ρ : G → A → A) (a : A) : Set G :=
+  {g | ρ g a = a}
+
+/-- **Proposition.** Stabilizers are subgroups. -/
+theorem isSubgroup_stabilizer {G A : Type*} {𝔾 : Group G} {ρ : G → A → A} (hρ : IsAction 𝔾 ρ)
+    (a : A) : IsSubgroup 𝔾 (stabilizer 𝔾 ρ a) := by
+  sorry
+
+/-- **Proposition.** If `b = ga`, then `Stab(b) = g • Stab(a) • g⁻¹`. -/
+theorem stabilizer_conj {G A : Type*} {𝔾 : Group G} {ρ : G → A → A} (hρ : IsAction 𝔾 ρ) (a : A)
+    (g : G) : stabilizer 𝔾 ρ (ρ g a) = {h | ∃ k ∈ stabilizer 𝔾 ρ a, h = 𝔾.op (𝔾.op g k) (𝔾.inv g)} := by
+  sorry
+
+/-- **Corollary.** If `O` is an orbit of the action of a finite group
+`G` on a set `A`, then `O` is finite and `|O|` divides `|G|`. -/
+theorem card_orbit_dvd_card {G A : Type*} [Fintype G] (𝔾 : Group G) {ρ : G → A → A}
+    (hρ : IsAction 𝔾 ρ) (a : A) [Fintype (orbit 𝔾 ρ a)] :
+    Fintype.card (orbit 𝔾 ρ a) ∣ Fintype.card G := by
+  sorry
+
+/-- The **left-multiplication action** of `𝔾` on `G`. -/
+def leftMulAction {G : Type*} (𝔾 : Group G) : G → G → G :=
+  𝔾.op
+
+theorem isAction_leftMulAction {G : Type*} (𝔾 : Group G) : IsAction 𝔾 (leftMulAction 𝔾) := by
+  sorry
+
+/-- **Theorem** (Cayley's theorem). Every group acts faithfully on
+some set: the left-multiplication action of `𝔾` on `G` is faithful. -/
+theorem isFaithfulAction_leftMulAction {G : Type*} (𝔾 : Group G) :
+    IsFaithfulAction 𝔾 (leftMulAction 𝔾) := by
+  sorry
+
+end GroupActions
+
 end Algebra0Lean.Groups

@@ -1015,3 +1015,109 @@
   $|G| = [G:H] \cdot |H|$. In particular, $|H|$ is a divisor of
   $|G|$.
 \end{corollary}
+
+\section{Group actions}
+\label{sec:groups:group-actions}
+
+\subsection{Actions on sets}
+\label{subsec:groups:actions-on-sets}
+
+\begin{definition}
+  \label{def:groups:action-on-a-set}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.IsAction}
+  \leanok
+  An \emph{action} of a group $G$ on a set $A$ is a function $\rho :
+  G \times A \to A$ such that $\rho(e_G, a) = a$ for all $a \in A$
+  and $\rho(gh, a) = \rho(g, \rho(h,a))$ for all $g, h \in G$, $a \in
+  A$.
+\end{definition}
+
+\begin{definition}
+  \label{def:groups:faithful-action}
+  \uses{def:groups:action-on-a-set}
+  \lean{Algebra0Lean.Groups.IsFaithfulAction}
+  \leanok
+  An action is \emph{faithful} (or \emph{effective}) if the identity
+  is the only element of $G$ fixing every element of $A$.
+\end{definition}
+
+\subsection{Transitive actions}
+\label{subsec:groups:transitive-actions-and-the-category-g-set}
+
+\begin{definition}
+  \label{def:groups:transitive-action}
+  \uses{def:groups:action-on-a-set}
+  \lean{Algebra0Lean.Groups.IsTransitiveAction}
+  \leanok
+  An action of a group $G$ on a (nonempty) set $A$ is \emph{transitive}
+  if $\forall a, b \in A\ \exists g \in G$ such that $b = ga$.
+\end{definition}
+
+\begin{definition}
+  \label{def:groups:orbit}
+  \uses{def:groups:action-on-a-set}
+  \lean{Algebra0Lean.Groups.orbit}
+  \leanok
+  The \emph{orbit} of $a \in A$ under an action of a group $G$ is the
+  set $O_G(a) := \{ga \mid g \in G\}$.
+\end{definition}
+
+\begin{definition}
+  \label{def:groups:stabilizer}
+  \uses{def:groups:action-on-a-set}
+  \lean{Algebra0Lean.Groups.stabilizer}
+  \leanok
+  Let $G$ act on a set $A$, and let $a \in A$. The \emph{stabilizer
+  subgroup} of $a$ is $\operatorname{Stab}_G(a) := \{g \in G \mid ga
+  = a\}$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:stabilizers-are-subgroups}
+  \uses{def:groups:stabilizer, def:groups:is-subgroup}
+  \lean{Algebra0Lean.Groups.isSubgroup_stabilizer}
+  Stabilizers are subgroups.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:groups:stabilizer-conjugation}
+  \uses{def:groups:stabilizer}
+  \lean{Algebra0Lean.Groups.stabilizer_conj}
+  Suppose a group $G$ acts on a set $A$, and let $a \in A$, $g \in G$,
+  $b = ga$. Then $\operatorname{Stab}_G(b) =
+  g\operatorname{Stab}_G(a)g^{-1}$.
+\end{proposition}
+
+\begin{corollary}
+  \label{coro:groups:orbit-divides-order}
+  \uses{def:groups:orbit, coro:groups:lagrange}
+  \lean{Algebra0Lean.Groups.card_orbit_dvd_card}
+  If $O$ is an orbit of the action of a finite group $G$ on a set
+  $A$, then $O$ is a finite set and $|O|$ divides $|G|$.
+\end{corollary}
+
+\begin{definition}
+  \label{def:groups:left-mult-action}
+  \uses{def:groups:action-on-a-set}
+  \lean{Algebra0Lean.Groups.leftMulAction}
+  \leanok
+  The \emph{action by left-multiplication} of $G$ on itself:
+  $\rho(g,a) := ga$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:isAction-leftMulAction}
+  \uses{def:groups:left-mult-action}
+  \lean{Algebra0Lean.Groups.isAction_leftMulAction}
+  The left-multiplication action is indeed an action.
+\end{proposition}
+
+\begin{theorem}[Cayley's theorem]
+  \label{thm:groups:cayleys-theorem}
+  \uses{def:groups:left-mult-action, def:groups:faithful-action}
+  \lean{Algebra0Lean.Groups.isFaithfulAction_leftMulAction}
+  Every group acts faithfully on some set: the left-multiplication
+  action of $G$ on itself is faithful. That is, every group may be
+  realized as a subgroup of a permutation group.
+\end{theorem}
