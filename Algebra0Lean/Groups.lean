@@ -801,4 +801,27 @@ theorem isCyclicGroup_of_isSubgroup_of_isCyclicGroup {G : Type*} {𝔾 : Group G
 
 end Subgroups
 
+section QuotientGroups
+
+/-- **Definition.** A subgroup `N` of `G` is **normal** if
+`g * n * g⁻¹ ∈ N` for every `g ∈ G`, `n ∈ N`. -/
+def IsNormalSubgroup {G : Type*} (𝔾 : Group G) (N : Set G) : Prop :=
+  IsSubgroup 𝔾 N ∧ ∀ g : G, ∀ n ∈ N, 𝔾.op (𝔾.op g n) (𝔾.inv g) ∈ N
+
+/-- **Proposition.** The kernel of a group homomorphism is a normal
+subgroup of the domain. -/
+theorem isNormalSubgroup_ker {G H : Type*} {𝔾 : Group G} {ℍ : Group H} {φ : G → H}
+    (hφ : IsGroupHom 𝔾 ℍ φ) : IsNormalSubgroup 𝔾 (GroupHom.ker ℍ φ) := by
+  sorry
+
+/-- **Definition.** The **left coset** `gH` of `H` by `g`. -/
+def leftCoset {G : Type*} (𝔾 : Group G) (g : G) (H : Set G) : Set G :=
+  {h | ∃ a ∈ H, h = 𝔾.op g a}
+
+/-- **Definition.** The **right coset** `Hg` of `H` by `g`. -/
+def rightCoset {G : Type*} (𝔾 : Group G) (H : Set G) (g : G) : Set G :=
+  {h | ∃ a ∈ H, h = 𝔾.op a g}
+
+end QuotientGroups
+
 end Algebra0Lean.Groups

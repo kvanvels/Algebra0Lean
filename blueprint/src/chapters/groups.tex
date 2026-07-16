@@ -843,3 +843,42 @@
   \lean{Algebra0Lean.Groups.isCyclicGroup_of_isSubgroup_of_isCyclicGroup}
   Every subgroup of a cyclic group is cyclic.
 \end{proposition}
+
+\section{Quotient groups}
+\label{sec:groups:quotient-groups}
+
+\subsection{Normal subgroups}
+\label{subsec:groups:normal-subgroups}
+
+\begin{definition}
+  \label{def:groups:normal-subgroup}
+  \uses{def:groups:is-subgroup}
+  \lean{Algebra0Lean.Groups.IsNormalSubgroup}
+  \leanok
+  A subgroup $N$ of a group $G$ is \emph{normal} if $\forall g \in G$,
+  $\forall n \in N$, $gng^{-1} \in N$.
+\end{definition}
+
+\begin{proposition}
+  \label{prop:groups:kernel-is-normal}
+  \uses{def:groups:normal-subgroup, def:groups:kernel}
+  \lean{Algebra0Lean.Groups.isNormalSubgroup_ker}
+  If $\varphi : G \to G'$ is any group homomorphism, then
+  $\ker\varphi$ is a normal subgroup of $G$.
+\end{proposition}
+\begin{proof}
+  \uses{prop:groups:kernel-is-subgroup}
+\end{proof}
+
+\subsection{Cosets}
+\label{subsec:groups:cosets}
+
+\begin{definition}
+  \label{def:groups:cosets}
+  \uses{def:groups:group}
+  \lean{Algebra0Lean.Groups.leftCoset, Algebra0Lean.Groups.rightCoset}
+  \leanok
+  The \emph{left-cosets} of a subgroup $H$ in a group $G$ are the sets
+  $aH$, for $a \in G$. The \emph{right-cosets} of $H$ are the sets
+  $Ha$, $a \in G$.
+\end{definition}
