@@ -1,5 +1,5 @@
 name = "Algebra0Lean"
-defaultTargets = ["Algebra0Lean"]
+defaultTargets = ["Algebra0Lean", "Exercises"]
 
 [leanOptions]
 pp.unicode.fun = true
